@@ -1,6 +1,6 @@
 # sdl3-freebasic
 
-FreeBasic bindings for [SDL3](https://github.com/libsdl-org/SDL)
+FreeBasic bindings for [SDL3](https://github.com/libsdl-org/SDL) -> 3.2.16
 
 ## Status
 This project is at an early stage, and feature testing is underway in Windows 10.
