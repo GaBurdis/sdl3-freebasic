@@ -3,7 +3,7 @@
 FreeBasic bindings for [SDL3](https://github.com/libsdl-org/SDL) -> 3.2.16
 
 ## Status
-This project is at an early stage, and feature testing is underway in Windows 10.
+This project is at an early stage, and feature testing is underway in Windows 10. The FreeBASIC version is used 1.10.1 x64
 
 ## Requirements
 You need to have SDL3 (at least version 3.2.16) installed as shared library. That means at runtime, it is trying to load SDL:
