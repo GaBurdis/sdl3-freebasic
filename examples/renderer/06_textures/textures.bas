@@ -37,7 +37,7 @@ Sub Main()
     
     '' SDL_Surface is pixel data the CPU can access. SDL_Texture is pixel data the GPU can access.
     '' Load a .bmp into a surface, move it to a texture from there.
-    surface = SDL_LoadBMP("../Data/sample.bmp")
+    surface = SDL_LoadBMP("../../Data/sample.bmp")
     If surface = Null Then
         SDL_Log("%s", SDL_GetError())
         quit = True
