@@ -53,7 +53,7 @@
 '' TODO: #define SDL_COMPILE_TIME_ASSERT(name, x) typedef int SDL_compile_time_assert_ ## name[(x) * 2 - 1]
 '#endif
 
-#define SDL_arraysize(array) (sizeof(array)/sizeof(@array(0)))
+'#define SDL_arraysize(array) (sizeof(array)/sizeof(@array(0))) ' not work on FB
 
 #define SDL_STRINGIFY_ARG(arg) #arg
 
