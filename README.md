@@ -38,7 +38,7 @@ Sub Main()
     While Not quit
         While SDL_PollEvent(@e)
             If e.type = SDL_EVENT_QUIT Then
-                quit = true
+                quit = True
             End If
         Wend
         
