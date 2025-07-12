@@ -24,7 +24,7 @@ Sub Main()
     Const As Long WINDOW_WIDTH = 640
     Const As Long WINDOW_HEIGHT = 480
   
-    If Not SDL_CreateWindowAndRenderer("Example Renderer Clipping Rectangle", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+    If Not SDL_CreateWindowAndRenderer("Example Renderer Read Pixels", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
         SDL_Quit()
         Exit Sub
