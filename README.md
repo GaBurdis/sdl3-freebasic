@@ -4,7 +4,7 @@ FreeBasic bindings for [SDL3](https://github.com/libsdl-org/SDL)
 
 Lib | Version |
 --- | ------- |
-SDL3 | 3.2.16 |
+SDL3 | 3.2.18 |
 
 ## Status
 This project is at an early stage, and feature testing is underway in Windows 10. The FreeBASIC version is used 1.10.1 x64
