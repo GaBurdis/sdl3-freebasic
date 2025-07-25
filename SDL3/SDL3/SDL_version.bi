@@ -4,7 +4,7 @@ extern "C"
 
 const SDL_MAJOR_VERSION = 3
 const SDL_MINOR_VERSION = 2
-const SDL_MICRO_VERSION = 16
+const SDL_MICRO_VERSION = 18
 
 #define SDL_VERSIONNUM(major, minor, patch) ((major) * 1000000 + (minor) * 1000 + (patch))
 #define SDL_VERSIONNUM_MAJOR(version) ((version) / 1000000)

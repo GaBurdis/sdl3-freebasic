@@ -186,6 +186,7 @@ declare function SDL_CreateWindowWithProperties(byval props as SDL_PropertiesID)
 
 #define SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN "SDL.window.create.always_on_top"
 #define SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN "SDL.window.create.borderless"
+#define SDL_PROP_WINDOW_CREATE_CONSTRAIN_POPUP_BOOLEAN "SDL.window.create.constrain_popup"
 #define SDL_PROP_WINDOW_CREATE_FOCUSABLE_BOOLEAN "SDL.window.create.focusable"
 #define SDL_PROP_WINDOW_CREATE_EXTERNAL_GRAPHICS_CONTEXT_BOOLEAN "SDL.window.create.external_graphics_context"
 #define SDL_PROP_WINDOW_CREATE_FLAGS_NUMBER "SDL.window.create.flags"

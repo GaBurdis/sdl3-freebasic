@@ -102,7 +102,7 @@ end function
 #ifdef SDL_WIKI_DOCUMENTATION_SECTION
  'TODO: SDL_FORCE_INLINE Uint16 SDL_Swap16(Uint16 x) { return x_but_byteswapped; }
  'TODO: SDL_FORCE_INLINE Uint32 SDL_Swap32(Uint32 x) { return x_but_byteswapped; }
- 'TODO: SDL_FORCE_INLINE Uint32 SDL_Swap64(Uint64 x) { return x_but_byteswapped; }
+ 'TODO: SDL_FORCE_INLINE Uint64 SDL_Swap64(Uint64 x) { return x_but_byteswapped; }
  #define SDL_Swap16LE(x) SwapOnlyIfNecessary(x)
  #define SDL_Swap32LE(x) SwapOnlyIfNecessary(x)
  #define SDL_Swap64LE(x) SwapOnlyIfNecessary(x)

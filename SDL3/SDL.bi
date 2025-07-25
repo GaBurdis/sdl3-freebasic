@@ -1,4 +1,4 @@
-'' FreeBASIC binding for SDL3-3.2.16
+'' FreeBASIC binding for SDL3-3.2.18
 ''
 '' based on the C header files:
 ''   Simple DirectMedia Layer
