@@ -20,43 +20,37 @@ This simple example just opens a window with a gray background:
 
 ```FreeBASIC
 #include "SDL3/SDL.bi"
- 
-Sub Main()
-    If Not SDL_Init(SDL_INIT_VIDEO) Then
-        SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
-        Exit Sub
-    End If
-  
-    Dim As SDL_Window Ptr win
-    Dim As SDL_Renderer Ptr renderer
-  
-    If Not SDL_CreateWindowAndRenderer("SDL3 on FreeBASIC", 640, 480, 0, @win, @renderer) Then
-        SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
-        SDL_Quit()
-        Exit Sub
-    End If
 
-    Dim As SDL_Event e
-    Dim As Boolean quit
-    
+Dim As SDL_Window Ptr win
+Dim As SDL_Renderer Ptr renderer
+Dim As SDL_Event e
+Dim As Boolean quit
+
+If Not SDL_Init(SDL_INIT_VIDEO) Then
+    SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
+    quit = True
+ElseIf Not SDL_CreateWindowAndRenderer("SDL3 on FreeBASIC", 640, 480, 0, @win, @renderer) Then
+    SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
+    quit = True
+Else
     SDL_SetRenderDrawColor(renderer, 66, 66, 66, 255)
+End If
 
-    While Not quit
-        While SDL_PollEvent(@e)
-            If e.type = SDL_EVENT_QUIT Then
-                quit = True
-            End If
-        Wend
-        
-        SDL_RenderClear(renderer)
-        
-        SDL_RenderPresent(renderer)
+While Not quit
+    While SDL_PollEvent(@e)
+        If e.type = SDL_EVENT_QUIT Then
+            quit = True
+        End If
     Wend
-          
-    SDL_DestroyRenderer(renderer)
-    SDL_DestroyWindow(win)
-    SDL_Quit()
-End Sub
+    
+    SDL_RenderClear(renderer)
+    
+    SDL_RenderPresent(renderer)
+Wend
+
+SDL_DestroyRenderer(renderer)
+SDL_DestroyWindow(win)
+SDL_Quit()
 
 Main()
 ```
