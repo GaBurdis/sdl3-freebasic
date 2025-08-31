@@ -52,7 +52,6 @@ SDL_DestroyRenderer(renderer)
 SDL_DestroyWindow(win)
 SDL_Quit()
 
-Main()
 ```
 
 ![Screenshot Windows](./exemple.png)
