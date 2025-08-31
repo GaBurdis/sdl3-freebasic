@@ -13,39 +13,32 @@
 ''    http://www.amazon.com/The-Living-Proof-Will-Provost/dp/B00004R8RH
 
 #include "SDL3/SDL.bi"
- 
-Sub Main()
-    If Not SDL_Init(SDL_INIT_VIDEO Or SDL_INIT_AUDIO) Then
-        SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
-        Exit Sub
-    End If
-    
-    '' We will use this renderer to draw into this window every frame.
-    Dim As SDL_Window Ptr win
-    Dim As SDL_Renderer Ptr renderer
-    
-    '' we don't _need_ a window for audio-only things but it's good policy to have one.
-    If Not SDL_CreateWindowAndRenderer("Example Audio Load Wave", 640, 480, 0, @win, @renderer) Then
-        SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
-        SDL_Quit()
-        Exit Sub
-    End If
-    
-    Dim As SDL_AudioStream Ptr stream
-    Dim As Long currentSineSample
-    Dim As Uint8 Ptr wavData
-    Dim As Uint32 wavDataLen
+
+'' We will use this renderer to draw into this window every frame.
+Dim As SDL_Window Ptr win
+Dim As SDL_Renderer Ptr renderer
+Dim As SDL_Event e
+Dim As Boolean quit
+
+Dim As SDL_AudioStream Ptr stream
+Dim As Uint8 Ptr wavData
+Dim As Uint32 wavDataLen
+
+If Not SDL_Init(SDL_INIT_VIDEO Or SDL_INIT_AUDIO) Then
+    SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
+    quit = True
+ElseIf Not SDL_CreateWindowAndRenderer("Example Audio Load Wave", 640, 480, 0, @win, @renderer) Then
+    SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
+    quit = True
+Else
     Dim As SDL_AudioSpec spec
-    
-    Dim As SDL_Event e
-    Dim As Boolean quit
     
     '' Load the .wav file from wherever the app is being run from.
     If Not SDL_LoadWAV("../../Data/sample.wav", @spec, @wavData, @wavDataLen) Then
         SDL_Log("Couldn't load .wav file: %s", SDL_GetError())
         quit = True
     End If
-    
+
     '' Create our audio stream in the same format as the .wav file. It'll convert to what the audio hardware wants.
     stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, @spec, 0, 0)
     If stream = Null Then
@@ -55,32 +48,30 @@ Sub Main()
 
     '' SDL_OpenAudioDeviceStream starts the device paused. You have to tell it to start!
     SDL_ResumeAudioStreamDevice(stream)
+End If
 
-    While Not quit
-        While SDL_PollEvent(@e)
-            If e.type = SDL_EVENT_QUIT Then
-                quit = True
-            End If
-        Wend
-
-        '' see if we need to feed the audio stream more data yet.
-        '' We're being lazy here, but if there's less than the entire wav file left to play,
-        '' just shove a whole copy of it into the queue, so we always have _tons_ of
-        '' data queued for playback.
-        If SDL_GetAudioStreamQueued(stream) < CLng(wavDataLen) Then
-            '' feed more data to the stream. It will queue at the end, and trickle out as the hardware needs more data.
-            SDL_PutAudioStreamData(stream, wavData, wavDataLen)
+While Not quit
+    While SDL_PollEvent(@e)
+        If e.type = SDL_EVENT_QUIT Then
+            quit = True
         End If
-        
-        '' we're not doing anything with the renderer, so just blank it out.
-        SDL_RenderClear(renderer)
-        SDL_RenderPresent(renderer)
     Wend
-    
-    SDL_free(wavData)   '' strictly speaking, this isn't necessary because the process is ending, but it's good policy.
-    SDL_DestroyRenderer(renderer)
-    SDL_DestroyWindow(win)
-    SDL_Quit()
-End Sub
 
-Main()
+    '' see if we need to feed the audio stream more data yet.
+    '' We're being lazy here, but if there's less than the entire wav file left to play,
+    '' just shove a whole copy of it into the queue, so we always have _tons_ of
+    '' data queued for playback.
+    If SDL_GetAudioStreamQueued(stream) < CLng(wavDataLen) Then
+        '' feed more data to the stream. It will queue at the end, and trickle out as the hardware needs more data.
+        SDL_PutAudioStreamData(stream, wavData, wavDataLen)
+    End If
+
+    '' we're not doing anything with the renderer, so just blank it out.
+    SDL_RenderClear(renderer)
+    SDL_RenderPresent(renderer)
+Wend
+
+SDL_free(wavData)   '' strictly speaking, this isn't necessary because the process is ending, but it's good policy.
+SDL_DestroyRenderer(renderer)
+SDL_DestroyWindow(win)
+SDL_Quit()
