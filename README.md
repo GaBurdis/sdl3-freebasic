@@ -5,7 +5,7 @@ FreeBasic bindings:
 Lib | Version |
 --- | ------- |
 [SDL3](https://github.com/libsdl-org/SDL) | 3.4.4 |
-[SDL3_image](https://github.com/libsdl-org/SDL_image) | 3.2.4 |
+[SDL3_image](https://github.com/libsdl-org/SDL_image) | 3.4.2 |
 [SDL3_ttf](https://github.com/libsdl-org/SDL_ttf) | 3.2.2 |
 
 ## Status
