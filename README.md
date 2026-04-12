@@ -7,6 +7,7 @@ Lib | Version |
 [SDL3](https://github.com/libsdl-org/SDL) | 3.4.4 |
 [SDL3_image](https://github.com/libsdl-org/SDL_image) | 3.4.2 |
 [SDL3_ttf](https://github.com/libsdl-org/SDL_ttf) | 3.2.2 |
+[SDL3_mixer](https://github.com/libsdl-org/SDL_mixer) | 3.2.0 |
 
 ## Status
 This project is at an early stage, and feature testing is underway in Windows 10. The FreeBASIC version is used 1.10.1 x64
