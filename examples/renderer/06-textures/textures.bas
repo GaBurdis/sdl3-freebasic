@@ -20,7 +20,7 @@ Dim As SDL_FRect dstRect
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Textures", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Textures", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
@@ -31,15 +31,15 @@ Else
     '' times) with data from a bitmap file.
 
     '' SDL_Surface is pixel data the CPU can access. SDL_Texture is pixel data the GPU can access.
-    '' Load a .bmp into a surface, move it to a texture from there.
-    surface = SDL_LoadBMP("../../Data/sample.bmp")
-    If surface = Null Then
+    '' Load a .png into a surface, move it to a texture from there.
+    surface = SDL_LoadPNG("../../Data/sample.png")
+    If surface = 0 Then
         SDL_Log("%s", SDL_GetError())
         quit = True
     End If
 
     texture = SDL_CreateTextureFromSurface(renderer, surface)
-    If texture = Null Then
+    If texture = 0 Then
         SDL_Log("Couldn't create static texture: %s", SDL_GetError())
         quit = True
     End If
@@ -60,8 +60,8 @@ While Not quit
     Dim As Uint64 now = SDL_GetTicks()
 
     '' we'll have the rectangles grow and shrink over a few seconds.
-    Dim As Single direction = IIf((now Mod 2000) >= 1000, 1.0, -1.0)
-    Dim As Single scale = CSng((CLng(now Mod 1000) - 500) / 500.0) * direction
+    Dim As Single direction = IIf((now Mod 2000) >= 1000, 1.0f, -1.0f)
+    Dim As Single scale = CSng((CLng(now Mod 1000) - 500) / 500.0f) * direction
 
     '' as you can see from this, rendering draws over whatever was drawn before it.
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE) '' black, full alpha
@@ -71,17 +71,17 @@ While Not quit
     '' stamp, there isn't a limit to the number of times you can draw with it.
 
     '' top left
-    dstRect.x = 100 * scale
-    dstRect.y = 0
+    dstRect.x = 100.0f * scale
+    dstRect.y = 0.0f
     SDL_RenderTexture(renderer, texture, 0, @dstRect)
 
     '' center this one.
-    dstRect.x = CSng(WINDOW_WIDTH - texture->w) / 2
-    dstRect.y = CSng(WINDOW_HEIGHT - texture->h) / 2
+    dstRect.x = CSng(WINDOW_WIDTH - texture->w) / 2.0f
+    dstRect.y = CSng(WINDOW_HEIGHT - texture->h) / 2.0f
     SDL_RenderTexture(renderer, texture, 0, @dstRect)
 
     '' bottom right.
-    dstRect.x = CSng(WINDOW_WIDTH - texture->w) - (100 * scale)
+    dstRect.x = CSng(WINDOW_WIDTH - texture->w) - (100.0f * scale)
     dstRect.y = CSng(WINDOW_HEIGHT - texture->h)
     SDL_RenderTexture(renderer, texture, 0, @dstRect)
 

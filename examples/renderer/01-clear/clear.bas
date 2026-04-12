@@ -15,7 +15,7 @@ Dim As Boolean quit
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Clear", 640, 480, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Clear", 640, 480, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 End If

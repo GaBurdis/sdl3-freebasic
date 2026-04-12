@@ -22,12 +22,12 @@ Dim As SDL_FRect dstRect
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Streaming Textures", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Streaming Textures", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, TEXTURE_SIZE, TEXTURE_SIZE)
-    If texture = Null Then
+    If texture = 0 Then
         SDL_Log("Couldn't create streaming texture: %s", SDL_GetError())
         quit = True
     End If
@@ -43,8 +43,8 @@ While Not quit
     Dim As Uint64 now = SDL_GetTicks()
 
     '' we'll have the rectangles grow and shrink over a few seconds.
-    Dim As Single direction = IIf((now Mod 2000) >= 1000, 1.0, -1.0)
-    Dim As Single scale = CSng((CLng(now Mod 1000) - 500) / 500.0) * direction
+    Dim As Single direction = IIf((now Mod 2000) >= 1000, 1.0f, -1.0f)
+    Dim As Single scale = CSng((CLng(now Mod 1000) - 500) / 500.0f) * direction
 
     '' To update a streaming texture, you need to lock it first. This gets you access to the pixels.
     '' Note that this is considered a _write-only_ operation: the buffer you get from locking
@@ -60,7 +60,7 @@ While Not quit
         r.w = TEXTURE_SIZE
         r.h = TEXTURE_SIZE / 10
         r.x = 0
-        r.y = CLng(CSng(TEXTURE_SIZE - r.h) * ((scale + 1.0) / 2.0))
+        r.y = CLng(CSng(TEXTURE_SIZE - r.h) * ((scale + 1.0f) / 2.0f))
         SDL_FillSurfaceRect(surface, @r, SDL_MapRGB(SDL_GetPixelFormatDetails(surface->format), 0, 0, 255, 0))  '' make a strip of the surface green
         SDL_UnlockTexture(texture)  ' upload the changes (and frees the temporary surface)!
     End If
@@ -73,8 +73,8 @@ While Not quit
     '' stamp, there isn't a limit to the number of times you can draw with it.
 
     '' Center this one. It'll draw the latest version of the texture we drew while it was locked.
-    dstRect.x = CSng(WINDOW_WIDTH  - TEXTURE_SIZE) / 2
-    dstRect.y = CSng(WINDOW_HEIGHT - TEXTURE_SIZE) / 2
+    dstRect.x = CSng(WINDOW_WIDTH  - TEXTURE_SIZE) / 2.0f
+    dstRect.y = CSng(WINDOW_HEIGHT - TEXTURE_SIZE) / 2.0f
     dstRect.w = CSng(TEXTURE_SIZE)
     dstRect.h = dstRect.w
     SDL_RenderTexture(renderer, texture, 0, @dstRect)

@@ -27,7 +27,7 @@ Dim As Uint32 wavDataLen
 If Not SDL_Init(SDL_INIT_VIDEO Or SDL_INIT_AUDIO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Audio Load Wave", 640, 480, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Audio Load Wave", 640, 480, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
@@ -41,7 +41,7 @@ Else
 
     '' Create our audio stream in the same format as the .wav file. It'll convert to what the audio hardware wants.
     stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, @spec, 0, 0)
-    If stream = Null Then
+    If stream = 0 Then
         SDL_Log("Couldn't create audio stream: %s", SDL_GetError())
         quit = True
     End If

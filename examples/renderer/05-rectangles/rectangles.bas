@@ -19,7 +19,7 @@ Dim As SDL_FRect rects(16)
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Rectangles", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Rectangles", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 End If
@@ -34,8 +34,8 @@ While Not quit
     Dim As Uint64 now = SDL_GetTicks()
 
     '' we'll have the rectangles grow and shrink over a few seconds.
-    Dim As Single direction = IIf((now Mod 2000) >= 1000, 1.0, -1.0)
-    Dim As Single scale = CSng((CLng(now Mod 1000) - 500) / 500.0) * direction
+    Dim As Single direction = IIf((now Mod 2000) >= 1000, 1.0f, -1.0f)
+    Dim As Single scale = CSng((CLng(now Mod 1000) - 500) / 500.0f) * direction
 
     '' as you can see from this, rendering draws over whatever was drawn before it.
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE) '' black, full alpha
@@ -50,13 +50,13 @@ While Not quit
     rects(0).x = 100
     rects(0).y = 100
     rects(0).w = 100 + (100 * scale)
-    rects(0).h = 100 + (100 * scale)
+    rects(0).h = rects(0).w
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE)   '' red, full alpha
     SDL_RenderRect(renderer, @rects(0))
 
     '' Now let's draw several rectangles with one function call.
     For i As Long = 0 To 3
-        Dim As Single size = (i + 1) * 50.0
+        Dim As Single size = (i + 1) * 50.0f
         rects(i).w = size + (size * scale)
         rects(i).h = rects(i).w
         rects(i).x = (WINDOW_WIDTH - rects(i).w) / 2    '' center it.
@@ -77,7 +77,7 @@ While Not quit
     '' ...and also fill a bunch of rectangles at once...
     For i As Long = 0 To UBound(rects)
         Dim As Single w = CSng(WINDOW_WIDTH / UBound(rects))
-        Dim As Single h = i * 8.0
+        Dim As Single h = i * 8.0f
         rects(i).x = i * w
         rects(i).y = WINDOW_HEIGHT - h
         rects(i).w = w

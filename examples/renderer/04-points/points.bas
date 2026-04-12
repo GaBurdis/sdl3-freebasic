@@ -33,7 +33,7 @@ Dim As Single pointSpeeds(NUM_POINTS)
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Points", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Points", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
@@ -54,7 +54,7 @@ While Not quit
     Wend
 
     Dim As Uint64 now = SDL_GetTicks()
-    Dim As Single elapsed = CSng(now - lastTime) / 1000.0   '' seconds since last iteration
+    Dim As Single elapsed = CSng(now - lastTime) / 1000.0f   '' seconds since last iteration
 
     '' let's move all our points a little for a new frame.
     For i As Long = 0 To UBound(points)
@@ -65,12 +65,12 @@ While Not quit
             '' off the screen; restart it elsewhere!
             If SDL_rand(2) Then
                 points(i).x = SDL_randf() * CSng(WINDOW_WIDTH)
-                points(i).y = 0.0
+                points(i).y = 0.0f
             Else
-                points(i).x = 0.0
+                points(i).x = 0.0f
                 points(i).y = SDL_randf() * CSng(WINDOW_HEIGHT)
             End If
-            pointSpeeds(i) = MIN_PIXELS_PER_SECOND + (SDL_randf * (MAX_PIXELS_PER_SECOND - MIN_PIXELS_PER_SECOND))
+            pointSpeeds(i) = MIN_PIXELS_PER_SECOND + (SDL_randf() * (MAX_PIXELS_PER_SECOND - MIN_PIXELS_PER_SECOND))
         End If
     Next i
 

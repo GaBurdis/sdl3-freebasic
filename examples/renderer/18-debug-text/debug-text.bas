@@ -17,7 +17,7 @@ Dim As SDL_Event e
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Debug Texture", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Debug Texture", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 End If
@@ -43,9 +43,9 @@ While Not quit
     SDL_RenderDebugText(renderer, 184, 200, "You can do it in different colors.")
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE)  '' white, full alpha
 
-    SDL_SetRenderScale(renderer, 4.0, 4.0)
+    SDL_SetRenderScale(renderer, 4.0f, 4.0f)
     SDL_RenderDebugText(renderer, 14, 65, "It can be scaled.")
-    SDL_SetRenderScale(renderer, 1.0, 1.0)
+    SDL_SetRenderScale(renderer, 1.0f, 1.0f)
     SDL_RenderDebugText(renderer, 64, 350, "This only does ASCII chars. So this laughing emoji won't draw: 🤣")
 
     SDL_RenderDebugTextFormat(renderer, CSng((WINDOW_WIDTH - (charsize * 46)) / 2), 400, "(This program has been running for %d seconds.)", CULngInt(SDL_GetTicks() / 1000) )

@@ -21,7 +21,7 @@ Dim As SDL_Rect viewport
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Viewport", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Viewport", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
@@ -32,15 +32,15 @@ Else
     '' times) with data from a bitmap file.
 
     '' SDL_Surface is pixel data the CPU can access. SDL_Texture is pixel data the GPU can access.
-    '' Load a .bmp into a surface, move it to a texture from there.
-    surface = SDL_LoadBMP("../../Data/sample.bmp")
-    If surface = Null Then
+    '' Load a .png into a surface, move it to a texture from there.
+    surface = SDL_LoadPNG("../../Data/sample.png")
+    If surface = 0 Then
         SDL_Log("Couldn't load bitmap: %s", SDL_GetError())
         quit = True
     End If
 
     texture = SDL_CreateTextureFromSurface(renderer, surface)
-    If texture = Null Then
+    If texture = 0 Then
         SDL_Log("Couldn't create static texture: %s", SDL_GetError())
         quit = True
     End If
@@ -70,15 +70,15 @@ While Not quit
     viewport.y = 0
     viewport.w = WINDOW_WIDTH / 2
     viewport.h = WINDOW_HEIGHT / 2
-    SDL_SetRenderViewport(renderer, null)   '' NULL means "use the whole window"
+    SDL_SetRenderViewport(renderer, 0)   '' NULL means "use the whole window"
     dstRect.y = 0
-    SDL_RenderTexture(renderer, texture, null, @dstRect)
+    SDL_RenderTexture(renderer, texture, 0, @dstRect)
 
     '' top right quarter of the window.
     viewport.x = WINDOW_WIDTH / 2
     viewport.y = WINDOW_HEIGHT / 2
     SDL_SetRenderViewport(renderer, @viewport)
-    SDL_RenderTexture(renderer, texture, null, @dstRect)
+    SDL_RenderTexture(renderer, texture, 0, @dstRect)
 
     '' bottom 20% of the window. Note it clips the width!
     viewport.x = 0
@@ -86,7 +86,7 @@ While Not quit
     viewport.w = WINDOW_WIDTH / 5
     viewport.h = WINDOW_HEIGHT / 5
     SDL_SetRenderViewport(renderer, @viewport)
-    SDL_RenderTexture(renderer, texture, null, @dstRect)
+    SDL_RenderTexture(renderer, texture, 0, @dstRect)
 
     '' what happens if you try to draw above the viewport? It should clip!
     viewport.x = 100
@@ -95,7 +95,7 @@ While Not quit
     viewport.h = WINDOW_HEIGHT
     SDL_SetRenderViewport(renderer, @viewport)
     dstRect.y = -50
-    SDL_RenderTexture(renderer, texture, null, @dstRect)
+    SDL_RenderTexture(renderer, texture, 0, @dstRect)
 
     SDL_RenderPresent(renderer) '' put it all on the screen!
 Wend

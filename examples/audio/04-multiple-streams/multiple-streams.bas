@@ -6,13 +6,23 @@
 
 #include "SDL3/SDL.bi"
 
+'' We will use this renderer to draw into this window every frame.
+Dim As SDL_Window Ptr win
+Dim As SDL_Renderer Ptr renderer
+Dim As SDL_Event e
+Dim As Boolean quit
+
+Dim Shared As SDL_AudioDeviceID audioDevice
+
 Type Sound
     wavData As Uint8 Ptr
     wavDataLen As Uint32
     stream As SDL_AudioStream Ptr
 End Type
 
-Function InitSound(ByVal fname As String, ByVal snd As Sound Ptr, ByVal audioDevice As SDL_AudioDeviceID) As Boolean
+Dim As Sound sounds(2)
+
+Function InitSound(ByVal fname As String, ByVal snd As Sound Ptr) As Boolean
     Dim As Boolean retval
     Dim As SDL_AudioSpec spec
 
@@ -37,19 +47,10 @@ Function InitSound(ByVal fname As String, ByVal snd As Sound Ptr, ByVal audioDev
     Return retval
 End Function
 
-'' We will use this renderer to draw into this window every frame.
-Dim As SDL_Window Ptr win
-Dim As SDL_Renderer Ptr renderer
-Dim As SDL_Event e
-Dim As Boolean quit
-
-Dim As SDL_AudioDeviceID audioDevice
-Dim As Sound sounds(2)
-
 If Not SDL_Init(SDL_INIT_VIDEO Or SDL_INIT_AUDIO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Audio Multiple Streams", 640, 480, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Audio Multiple Streams", 640, 480, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
@@ -60,9 +61,9 @@ Else
         quit = True
     End If
 
-    If Not InitSound("sample.wav", @sounds(0), audioDevice) Then
+    If Not InitSound("sample.wav", @sounds(0)) Then
         quit = True
-    ElseIf Not InitSound("sword.wav", @sounds(1), audioDevice) Then
+    ElseIf Not InitSound("sword.wav", @sounds(1)) Then
         quit = True
     End If
 End If

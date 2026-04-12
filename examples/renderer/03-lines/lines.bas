@@ -20,14 +20,14 @@ Dim As SDL_FPoint linePoints(9) = { _
     Type(100, 354), Type(220, 230), Type(140, 230), Type(320, 100), Type(500, 230), _
     Type(420, 230), Type(540, 354), Type(400, 354), Type(100, 354)}
 
-Dim As Single size = 30
-Dim As Single x = 320
-Dim As Single y =  95 - (size / 2)
+Dim As Single size = 30.0f
+Dim As Single x = 320.0f
+Dim As Single y =  95.0f - (size / 2.0f)
 
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Lines", 640, 480, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Lines", 640, 480, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 End If
@@ -57,8 +57,9 @@ While Not quit
     '' here's a bunch of lines drawn out from a center point in a circle.
     '' we randomize the color of each line, so it functions as animation.
     For i As Long = 0 To 360
+        Dim As Single r = CSng(i * (SDL_PI_F / 180.0f))
         SDL_SetRenderDrawColor(renderer, SDL_rand(256), SDL_rand(256), SDL_rand(256), SDL_ALPHA_OPAQUE)
-        SDL_RenderLine(renderer, x, y, x + SDL_sinf(i) * size, y + SDL_cosf(i) * size)
+        SDL_RenderLine(renderer, x, y, x + SDL_cosf(r) * size, y + SDL_sinf(r) * size)
     Next i
 
     SDL_RenderPresent(renderer) '' put it all on the screen!

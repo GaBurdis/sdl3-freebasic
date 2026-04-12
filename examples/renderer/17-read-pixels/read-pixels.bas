@@ -30,7 +30,7 @@ Dim As Long convertedTextureHeight
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Read Pixels", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Read Pixels", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
@@ -39,8 +39,8 @@ Else
     '' times) with data from a bitmap file.
 
     '' SDL_Surface is pixel data the CPU can access. SDL_Texture is pixel data the GPU can access.
-    '' Load a .bmp into a surface, move it to a texture from there.
-    surface = SDL_LoadBMP("../../Data/sample.bmp")
+    '' Load a .png into a surface, move it to a texture from there.
+    surface = SDL_LoadPNG("../../Data/sample.png")
     If surface = Null Then
         SDL_Log("Couldn't load bitmap: %s", SDL_GetError())
         quit = True
@@ -65,20 +65,20 @@ While Not quit
     Dim As Uint64 now = SDL_GetTicks()
 
     '' we'll have a texture rotate around over 2 seconds (2000 milliseconds). 360 degrees in a circle!
-    Dim As Single rotation = (CSng(CLng(now Mod 2000)) / 2000.0) * 360.0
+    Dim As Single rotation = (CSng(CLng(now Mod 2000)) / 2000.0f) * 360.0f
 
     '' as you can see from this, rendering draws over whatever was drawn before it.
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE) '' black, full alpha
     SDL_RenderClear(renderer)   '' start with a blank canvas.
 
     '' Center this one, and draw it with some rotation so it spins!
-    dstRect.x = CSng(WINDOW_WIDTH - texture->w) / 2.0
-    dstRect.y = CSng(WINDOW_HEIGHT - texture->h) / 2.0
+    dstRect.x = CSng(WINDOW_WIDTH - texture->w) / 2.0f
+    dstRect.y = CSng(WINDOW_HEIGHT - texture->h) / 2.0f
     dstRect.w = CSng(texture->w)
     dstRect.h = CSng(texture->h)
     '' rotate it around the center of the texture; you can rotate it from a different point, too!
-    center.x = texture->w / 2.0
-    center.y = texture->h / 2.0
+    center.x = texture->w / 2.0f
+    center.y = texture->h / 2.0f
     SDL_RenderTextureRotated(renderer, texture, 0, @dstRect, rotation, @center, SDL_FLIP_NONE)
 
     '' this next whole thing is _super_ expensive. Seriously, don't do this in real life.
@@ -88,18 +88,18 @@ While Not quit
     surface = SDL_RenderReadPixels(renderer, 0)
 
     '' This is also expensive, but easier: convert the pixels to a format we want.
-    If (surface <> Null And (surface->format <> SDL_PIXELFORMAT_RGBA8888) And (surface->format <> SDL_PIXELFORMAT_BGRA8888)) then
+    If (surface <> 0 And (surface->format <> SDL_PIXELFORMAT_RGBA8888) And (surface->format <> SDL_PIXELFORMAT_BGRA8888)) then
         Dim As SDL_Surface Ptr converted = SDL_ConvertSurface(surface, SDL_PIXELFORMAT_RGBA8888)
         SDL_DestroySurface(surface)
         surface = converted
     End If
 
-    If surface <> Null Then
+    If surface <> 0 Then
         '' Rebuild converted_texture if the dimensions have changed (window resized, etc).
         If ((surface->w <> convertedTextureWidth) Or (surface->h <> convertedTextureHeight)) Then
             SDL_DestroyTexture(convertedTexture)
             convertedTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, surface->w, surface->h)
-            If convertedTexture = Null Then
+            If convertedTexture = 0 Then
                 SDL_Log("Couldn't (re)create conversion texture: %s", SDL_GetError())
                 quit = True
             End If
@@ -134,10 +134,10 @@ While Not quit
         SDL_DestroySurface(surface)
 
         '' draw the texture to the top-left of the screen.
-        dstRect.x = 0.0
-        dstRect.y = 0.0
-        dstRect.w = CSng(WINDOW_WIDTH) / 4.0
-        dstRect.h = CSng(WINDOW_HEIGHT) / 4.0
+        dstRect.x = 0.0f
+        dstRect.y = 0.0f
+        dstRect.w = CSng(WINDOW_WIDTH) / 4.0f
+        dstRect.h = CSng(WINDOW_HEIGHT) / 4.0f
         SDL_RenderTexture(renderer, convertedTexture, 0, @dstRect)
     End If
 

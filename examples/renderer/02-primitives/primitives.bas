@@ -17,14 +17,14 @@ Dim As SDL_FRect rect
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Primitives", 640, 480, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Primitives", 640, 480, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
     '' set up some random points
-    For i As Long = LBound(points) To UBound(points)
-        points(i).x = SDL_randf() * 440.0 + 100.0
-        points(i).y = SDL_randf() * 280.0 + 100.0
+    For i As Long = 0 To UBound(points)
+        points(i).x = SDL_randf() * 440.0f + 100.0f
+        points(i).y = SDL_randf() * 280.0f + 100.0f
     Next i
 End If
 

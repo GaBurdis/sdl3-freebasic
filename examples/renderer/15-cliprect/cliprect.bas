@@ -25,7 +25,7 @@ Dim As Uint64 lastTime
 If Not SDL_Init(SDL_INIT_VIDEO) Then
     SDL_Log("Couldn't initialize SDL: %s", SDL_GetError())
     quit = True
-ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Clipping Rectangle", WINDOW_WIDTH, WINDOW_HEIGHT, 0, @win, @renderer) Then
+ElseIf Not SDL_CreateWindowAndRenderer("Example Renderer Clipping Rectangle", WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE, @win, @renderer) Then
     SDL_Log("Couldn't create window/renderer: %s", SDL_GetError())
     quit = True
 Else
@@ -36,23 +36,23 @@ Else
     '' times) with data from a bitmap file.
 
     '' SDL_Surface is pixel data the CPU can access. SDL_Texture is pixel data the GPU can access.
-    '' Load a .bmp into a surface, move it to a texture from there.
-    surface = SDL_LoadBMP("../../Data/sample.bmp")
-    If surface = Null Then
+    '' Load a .png into a surface, move it to a texture from there.
+    surface = SDL_LoadPNG("../../Data/sample.png")
+    If surface = 0 Then
         SDL_Log("Couldn't load bitmap: %s", SDL_GetError())
         quit = True
     End If
 
     texture = SDL_CreateTextureFromSurface(renderer, surface)
-    If texture = Null Then
+    If texture = 0 Then
         SDL_Log("Couldn't create static texture: %s", SDL_GetError())
         quit = True
     End If
 
     SDL_DestroySurface(surface) '' done with this, the texture has a copy of the pixels now.
 
-    cliprectDirection.x = 1.0
-    cliprectDirection.y = 1.0
+    cliprectDirection.x = 1.0f
+    cliprectDirection.y = 1.0f
 
     cliprect.w = CLIPRECT_SIZE
     cliprect.h = CLIPRECT_SIZE
@@ -71,26 +71,26 @@ While Not quit
     cliprect.y = CLng(SDL_roundf(cliprectPosition.y))
 
     Dim As Uint64 now = SDL_GetTicks()
-    Dim As Single elapsed = CSng(now - lastTime) / 1000.0   '' seconds since last iteration
+    Dim As Single elapsed = CSng(now - lastTime) / 1000.0f   '' seconds since last iteration
     Dim As Single distance = elapsed * CLIPRECT_SPEED
 
     '' Set a new clipping rectangle position
     cliprectPosition.x += distance * cliprectDirection.x
-    If cliprectPosition.x < 0.0 Then
-        cliprectPosition.x = 0.0
-        cliprectDirection.x = 1.0
-    ElseIf cliprectPosition.x >= (WINDOW_WIDTH - CLIPRECT_SIZE) Then
-        cliprectPosition.x = (WINDOW_WIDTH - CLIPRECT_SIZE) - 1
-        cliprectDirection.x = -1.0
+    If cliprectPosition.x < -CLIPRECT_SIZE Then
+        cliprectPosition.x = -CLIPRECT_SIZE
+        cliprectDirection.x = 1.0f
+    ElseIf cliprectPosition.x >= WINDOW_WIDTH Then
+        cliprectPosition.x = WINDOW_WIDTH - 1
+        cliprectDirection.x = -1.0f
     End If
 
     cliprectPosition.y += distance * cliprectDirection.y
-    If cliprectPosition.y < 0.0 Then
-        cliprectPosition.y = 0.0
-        cliprectDirection.y = 1.0
-    ElseIf cliprectPosition.y >= (WINDOW_HEIGHT - CLIPRECT_SIZE) Then
-        cliprectPosition.y = (WINDOW_HEIGHT - CLIPRECT_SIZE) - 1
-        cliprectDirection.y = -1.0
+    If cliprectPosition.y < -CLIPRECT_SIZE Then
+        cliprectPosition.y = -CLIPRECT_SIZE
+        cliprectDirection.y = 1.0f
+    ElseIf cliprectPosition.y >= WINDOW_HEIGHT Then
+        cliprectPosition.y = WINDOW_HEIGHT - 1
+        cliprectDirection.y = -1.0f
     End If
     SDL_SetRenderClipRect(renderer, @cliprect)
 
@@ -104,7 +104,7 @@ While Not quit
 
     '' stretch the texture across the entire window. Only the piece in the
     '' clipping rectangle will actually render, though!
-    SDL_RenderTexture(renderer, texture, Null, Null)
+    SDL_RenderTexture(renderer, texture, 0, 0)
 
     SDL_RenderPresent(renderer) '' put it all on the screen!
 Wend
