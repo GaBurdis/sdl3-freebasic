@@ -42,6 +42,7 @@ declare function SDL_IOFromMem(byval mem as any ptr, byval size as uinteger) as 
 
 #define SDL_PROP_IOSTREAM_MEMORY_POINTER "SDL.iostream.memory.base"
 #define SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER "SDL.iostream.memory.size"
+#define SDL_PROP_IOSTREAM_MEMORY_FREE_FUNC_POINTER "SDL.iostream.memory.free"
 
 declare function SDL_IOFromConstMem(byval mem as const any ptr, byval size as uinteger) as SDL_IOStream ptr
 declare function SDL_IOFromDynamicMem() as SDL_IOStream ptr

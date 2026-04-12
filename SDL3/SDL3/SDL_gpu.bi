@@ -2,19 +2,19 @@
 
 extern "C"
 
-type SDL_GPUDevice as _SDL_GPUDevice
-type SDL_GPUBuffer as _SDL_GPUBuffer
-type SDL_GPUTransferBuffer as _SDL_GPUTransferBuffer
-type SDL_GPUTexture as _SDL_GPUTexture
-type SDL_GPUSampler as _SDL_GPUSampler
-type SDL_GPUShader as _SDL_GPUShader
-type SDL_GPUComputePipeline as _SDL_GPUComputePipeline
-type SDL_GPUGraphicsPipeline as _SDL_GPUGraphicsPipeline
-type SDL_GPUCommandBuffer as _SDL_GPUCommandBuffer
-type SDL_GPURenderPass as _SDL_GPURenderPass
-type SDL_GPUComputePass as _SDL_GPUComputePass
-type SDL_GPUCopyPass as _SDL_GPUCopyPass
-type SDL_GPUFence as _SDL_GPUFence
+type SDL_GPUDevice as SDL_GPUDevice_
+type SDL_GPUBuffer as SDL_GPUBuffer_
+type SDL_GPUTransferBuffer as SDL_GPUTransferBuffer_
+type SDL_GPUTexture as SDL_GPUTexture_
+type SDL_GPUSampler as SDL_GPUSampler_
+type SDL_GPUShader as SDL_GPUShader_
+type SDL_GPUComputePipeline as SDL_GPUComputePipeline_
+type SDL_GPUGraphicsPipeline as SDL_GPUGraphicsPipeline_
+type SDL_GPUCommandBuffer as SDL_GPUCommandBuffer_
+type SDL_GPURenderPass as SDL_GPURenderPass_
+type SDL_GPUComputePass as SDL_GPUComputePass_
+type SDL_GPUCopyPass as SDL_GPUCopyPass_
+type SDL_GPUFence as SDL_GPUFence_
 
 type SDL_GPUPrimitiveType as long
 enum
@@ -577,7 +577,7 @@ type SDL_GPUMultisampleState
 	sample_count as SDL_GPUSampleCount
 	sample_mask as Uint32
 	enable_mask as boolean
-	padding1 as Uint8
+	enable_alpha_to_coverage as boolean
 	padding2 as Uint8
 	padding3 as Uint8
 end type
@@ -665,8 +665,8 @@ type SDL_GPUDepthStencilTargetInfo
 	stencil_store_op as SDL_GPUStoreOp
 	cycle as boolean
 	clear_stencil as Uint8
-	padding1 as Uint8
-	padding2 as Uint8
+	mip_level as Uint8
+	layer as Uint8
 end type
 
 type SDL_GPUBlitInfo
@@ -715,22 +715,51 @@ declare function SDL_GPUSupportsProperties(byval props as SDL_PropertiesID) as b
 declare function SDL_CreateGPUDevice(byval format_flags as SDL_GPUShaderFormat, byval debug_mode as boolean, byval name as const zstring ptr) as SDL_GPUDevice ptr
 declare function SDL_CreateGPUDeviceWithProperties(byval props as SDL_PropertiesID) as SDL_GPUDevice ptr
 
-#define SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN          "SDL.gpu.device.create.debugmode"
-#define SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN     "SDL.gpu.device.create.preferlowpower"
-#define SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING                "SDL.gpu.device.create.name"
-#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_PRIVATE_BOOLEAN    "SDL.gpu.device.create.shaders.private"
-#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_SPIRV_BOOLEAN      "SDL.gpu.device.create.shaders.spirv"
-#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXBC_BOOLEAN       "SDL.gpu.device.create.shaders.dxbc"
-#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXIL_BOOLEAN       "SDL.gpu.device.create.shaders.dxil"
-#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN        "SDL.gpu.device.create.shaders.msl"
-#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN   "SDL.gpu.device.create.shaders.metallib"
-#define SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING "SDL.gpu.device.create.d3d12.semantic"
+#define SDL_PROP_GPU_DEVICE_CREATE_DEBUGMODE_BOOLEAN                            "SDL.gpu.device.create.debugmode"
+#define SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN                       "SDL.gpu.device.create.preferlowpower"
+#define SDL_PROP_GPU_DEVICE_CREATE_VERBOSE_BOOLEAN                              "SDL.gpu.device.create.verbose"
+#define SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING                                  "SDL.gpu.device.create.name"
+#define SDL_PROP_GPU_DEVICE_CREATE_FEATURE_CLIP_DISTANCE_BOOLEAN                "SDL.gpu.device.create.feature.clip_distance"
+#define SDL_PROP_GPU_DEVICE_CREATE_FEATURE_DEPTH_CLAMPING_BOOLEAN               "SDL.gpu.device.create.feature.depth_clamping"
+#define SDL_PROP_GPU_DEVICE_CREATE_FEATURE_INDIRECT_DRAW_FIRST_INSTANCE_BOOLEAN "SDL.gpu.device.create.feature.indirect_draw_first_instance"
+#define SDL_PROP_GPU_DEVICE_CREATE_FEATURE_ANISOTROPY_BOOLEAN                   "SDL.gpu.device.create.feature.anisotropy"
+#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_PRIVATE_BOOLEAN                      "SDL.gpu.device.create.shaders.private"
+#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_SPIRV_BOOLEAN                        "SDL.gpu.device.create.shaders.spirv"
+#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXBC_BOOLEAN                         "SDL.gpu.device.create.shaders.dxbc"
+#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_DXIL_BOOLEAN                         "SDL.gpu.device.create.shaders.dxil"
+#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_MSL_BOOLEAN                          "SDL.gpu.device.create.shaders.msl"
+#define SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN                     "SDL.gpu.device.create.shaders.metallib"
+#define SDL_PROP_GPU_DEVICE_CREATE_D3D12_ALLOW_FEWER_RESOURCE_SLOTS_BOOLEAN     "SDL.gpu.device.create.d3d12.allowtier1resourcebinding"
+#define SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING                   "SDL.gpu.device.create.d3d12.semantic"
+#define SDL_PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_VERSION_NUMBER             "SDL.gpu.device.create.d3d12.agility_sdk_version"
+#define SDL_PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_PATH_STRING                "SDL.gpu.device.create.d3d12.agility_sdk_path"
+#define SDL_PROP_GPU_DEVICE_CREATE_VULKAN_REQUIRE_HARDWARE_ACCELERATION_BOOLEAN "SDL.gpu.device.create.vulkan.requirehardwareacceleration"
+#define SDL_PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER                       "SDL.gpu.device.create.vulkan.options"
+#define SDL_PROP_GPU_DEVICE_CREATE_METAL_ALLOW_MACFAMILY1_BOOLEAN               "SDL.gpu.device.create.metal.allowmacfamily1"
+
+type SDL_GPUVulkanOptions
+    vulkan_api_versio as Uint32
+    feature_list as any ptr
+    	vulkan_10_physical_device_features as any ptr
+        device_extension_count as Uint32
+        device_extension_names as const zstring ptr ptr
+        instance_extension_count as Uint32
+        instance_extension_names as const zstring ptr ptr
+
+end type
 
 declare sub SDL_DestroyGPUDevice(byval device as SDL_GPUDevice ptr)
 declare function SDL_GetNumGPUDrivers() as long
 declare function SDL_GetGPUDriver(byval index as long) as const zstring ptr
 declare function SDL_GetGPUDeviceDriver(byval device as SDL_GPUDevice ptr) as const zstring ptr
 declare function SDL_GetGPUShaderFormats(byval device as SDL_GPUDevice ptr) as SDL_GPUShaderFormat
+declare function SDL_GetGPUDeviceProperties(byval device as SDL_GPUDevice ptr) as SDL_PropertiesID
+
+#define SDL_PROP_GPU_DEVICE_NAME_STRING               "SDL.gpu.device.name"
+#define SDL_PROP_GPU_DEVICE_DRIVER_NAME_STRING        "SDL.gpu.device.driver_name"
+#define SDL_PROP_GPU_DEVICE_DRIVER_VERSION_STRING     "SDL.gpu.device.driver_version"
+#define SDL_PROP_GPU_DEVICE_DRIVER_INFO_STRING        "SDL.gpu.device.driver_info"
+
 declare function SDL_CreateGPUComputePipeline(byval device as SDL_GPUDevice ptr, byval createinfo as const SDL_GPUComputePipelineCreateInfo ptr) as SDL_GPUComputePipeline ptr
 #define SDL_PROP_GPU_COMPUTEPIPELINE_CREATE_NAME_STRING "SDL.gpu.computepipeline.create.name"
 declare function SDL_CreateGPUGraphicsPipeline(byval device as SDL_GPUDevice ptr, byval createinfo as const SDL_GPUGraphicsPipelineCreateInfo ptr) as SDL_GPUGraphicsPipeline ptr
@@ -832,6 +861,8 @@ declare function SDL_GPUTextureFormatTexelBlockSize(byval format as SDL_GPUTextu
 declare function SDL_GPUTextureSupportsFormat(byval device as SDL_GPUDevice ptr, byval format as SDL_GPUTextureFormat, byval type as SDL_GPUTextureType, byval usage as SDL_GPUTextureUsageFlags) as boolean
 declare function SDL_GPUTextureSupportsSampleCount(byval device as SDL_GPUDevice ptr, byval format as SDL_GPUTextureFormat, byval sample_count as SDL_GPUSampleCount) as boolean
 declare function SDL_CalculateGPUTextureFormatSize(byval format as SDL_GPUTextureFormat, byval width as Uint32, byval height as Uint32, byval depth_or_layer_count as Uint32) as Uint32
+declare function SDL_GetPixelFormatFromGPUTextureFormat(byval format as SDL_GPUTextureFormat) as SDL_PixelFormat
+declare function SDL_GetGPUTextureFormatFromPixelFormat(byval format as SDL_PixelFormat) as SDL_GPUTextureFormat
 
 #ifdef SDL_PLATFORM_GDK
  declare sub SDL_GDKSuspendGPU(byval device as SDL_GPUDevice ptr)

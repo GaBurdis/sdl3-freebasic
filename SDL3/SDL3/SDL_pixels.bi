@@ -294,7 +294,7 @@ enum
 	SDL_COLORSPACE_BT2020_LIMITED = &h21102609u
 	SDL_COLORSPACE_BT2020_FULL = &h22102609u
 	SDL_COLORSPACE_RGB_DEFAULT = SDL_COLORSPACE_SRGB
-	SDL_COLORSPACE_YUV_DEFAULT = SDL_COLORSPACE_JPEG
+	SDL_COLORSPACE_YUV_DEFAULT = SDL_COLORSPACE_BT601_LIMITED
 end enum
 
 type SDL_Color
@@ -346,7 +346,7 @@ declare function SDL_SetPaletteColors(byval palette as SDL_Palette ptr, byval co
 declare sub SDL_DestroyPalette(byval palette as SDL_Palette ptr)
 declare function SDL_MapRGB(byval format as const SDL_PixelFormatDetails ptr, byval palette as const SDL_Palette ptr, byval r as Uint8, byval g as Uint8, byval b as Uint8) as Uint32
 declare function SDL_MapRGBA(byval format as const SDL_PixelFormatDetails ptr, byval palette as const SDL_Palette ptr, byval r as Uint8, byval g as Uint8, byval b as Uint8, byval a as Uint8) as Uint32
-declare sub SDL_GetRGB(byval pixel as Uint32, byval format as const SDL_PixelFormatDetails ptr, byval palette as const SDL_Palette ptr, byval r as Uint8 ptr, byval g as Uint8 ptr, byval b as Uint8 ptr)
-declare sub SDL_GetRGBA(byval pixel as Uint32, byval format as const SDL_PixelFormatDetails ptr, byval palette as const SDL_Palette ptr, byval r as Uint8 ptr, byval g as Uint8 ptr, byval b as Uint8 ptr, byval a as Uint8 ptr)
+declare sub SDL_GetRGB(byval pixelvalue as Uint32, byval format as const SDL_PixelFormatDetails ptr, byval palette as const SDL_Palette ptr, byval r as Uint8 ptr, byval g as Uint8 ptr, byval b as Uint8 ptr)
+declare sub SDL_GetRGBA(byval pixelvalue as Uint32, byval format as const SDL_PixelFormatDetails ptr, byval palette as const SDL_Palette ptr, byval r as Uint8 ptr, byval g as Uint8 ptr, byval b as Uint8 ptr, byval a as Uint8 ptr)
 
 end extern

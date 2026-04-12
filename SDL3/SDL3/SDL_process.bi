@@ -18,6 +18,7 @@ declare function SDL_CreateProcessWithProperties(byval props as SDL_PropertiesID
 
 #define SDL_PROP_PROCESS_CREATE_ARGS_POINTER "SDL.process.create.args"
 #define SDL_PROP_PROCESS_CREATE_ENVIRONMENT_POINTER "SDL.process.create.environment"
+#define SDL_PROP_PROCESS_CREATE_WORKING_DIRECTORY_STRING "SDL.process.create.working_directory"
 #define SDL_PROP_PROCESS_CREATE_STDIN_NUMBER "SDL.process.create.stdin_option"
 #define SDL_PROP_PROCESS_CREATE_STDIN_POINTER "SDL.process.create.stdin_source"
 #define SDL_PROP_PROCESS_CREATE_STDOUT_NUMBER "SDL.process.create.stdout_option"
@@ -26,6 +27,7 @@ declare function SDL_CreateProcessWithProperties(byval props as SDL_PropertiesID
 #define SDL_PROP_PROCESS_CREATE_STDERR_POINTER "SDL.process.create.stderr_source"
 #define SDL_PROP_PROCESS_CREATE_STDERR_TO_STDOUT_BOOLEAN "SDL.process.create.stderr_to_stdout"
 #define SDL_PROP_PROCESS_CREATE_BACKGROUND_BOOLEAN "SDL.process.create.background"
+#define SDL_PROP_PROCESS_CREATE_CMDLINE_STRING "SDL.process.create.cmdline"
 
 declare function SDL_GetProcessProperties(byval process as SDL_Process ptr) as SDL_PropertiesID
 

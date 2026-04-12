@@ -31,8 +31,9 @@ enum
 	SDL_EVENT_DISPLAY_DESKTOP_MODE_CHANGED
 	SDL_EVENT_DISPLAY_CURRENT_MODE_CHANGED
 	SDL_EVENT_DISPLAY_CONTENT_SCALE_CHANGED
+    SDL_EVENT_DISPLAY_USABLE_BOUNDS_CHANGED
 	SDL_EVENT_DISPLAY_FIRST = SDL_EVENT_DISPLAY_ORIENTATION
-	SDL_EVENT_DISPLAY_LAST = SDL_EVENT_DISPLAY_CONTENT_SCALE_CHANGED
+	SDL_EVENT_DISPLAY_LAST = SDL_EVENT_DISPLAY_USABLE_BOUNDS_CHANGED
     
 	SDL_EVENT_WINDOW_SHOWN = &h202
 	SDL_EVENT_WINDOW_HIDDEN
@@ -70,6 +71,8 @@ enum
 	SDL_EVENT_KEYBOARD_ADDED
 	SDL_EVENT_KEYBOARD_REMOVED
 	SDL_EVENT_TEXT_EDITING_CANDIDATES
+    SDL_EVENT_SCREEN_KEYBOARD_SHOWN
+    SDL_EVENT_SCREEN_KEYBOARD_HIDDEN
     
 	SDL_EVENT_MOUSE_MOTION = &h400
 	SDL_EVENT_MOUSE_BUTTON_DOWN
@@ -105,6 +108,10 @@ enum
 	SDL_EVENT_FINGER_UP
 	SDL_EVENT_FINGER_MOTION
     SDL_EVENT_FINGER_CANCELED
+    
+    SDL_EVENT_PINCH_BEGIN      = &h710
+    SDL_EVENT_PINCH_UPDATE
+    SDL_EVENT_PINCH_END
     
 	SDL_EVENT_CLIPBOARD_UPDATE = &h900
     
@@ -434,6 +441,14 @@ type SDL_TouchFingerEvent
 	windowID as SDL_WindowID
 end type
 
+type SDL_PinchFingerEvent
+    as SDL_EventType type
+    reserved as Uint32
+	timestamp as Uint64
+    scale as single
+    windowID as SDL_WindowID
+end type
+
 type SDL_PenProximityEvent
 	as SDL_EventType type
 	reserved as Uint32
@@ -568,6 +583,7 @@ union SDL_Event
 	quit as SDL_QuitEvent
 	user as SDL_UserEvent
 	tfinger as SDL_TouchFingerEvent
+    pinch as SDL_PinchFingerEvent
 	pproximity as SDL_PenProximityEvent
 	ptouch as SDL_PenTouchEvent
 	pmotion as SDL_PenMotionEvent
@@ -609,5 +625,6 @@ declare sub SDL_SetEventEnabled(byval type as Uint32, byval enabled as boolean)
 declare function SDL_EventEnabled(byval type as Uint32) as boolean
 declare function SDL_RegisterEvents(byval numevents as long) as Uint32
 declare function SDL_GetWindowFromEvent(byval event as const SDL_Event ptr) as SDL_Window ptr
+declare function SDL_GetEventDescription(byval event as const SDL_Event ptr, byval buf as zstring ptr, byval buflen as long) as long
 
 end extern

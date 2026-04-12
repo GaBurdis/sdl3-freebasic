@@ -85,8 +85,7 @@ declare function TTF_GetFontStyle(byval font as const TTF_Font ptr) as TTF_FontS
 declare function TTF_SetFontOutline(byval font as TTF_Font ptr, byval outline as long) as boolean
 declare function TTF_GetFontOutline(byval font as const TTF_Font ptr) as long
 
-type TTF_HintingFlags as long
-enum
+enum TTF_HintingFlags
 	TTF_HINTING_INVALID = -1
 	TTF_HINTING_NORMAL
 	TTF_HINTING_LIGHT
@@ -114,8 +113,7 @@ const TTF_FONT_WEIGHT_EXTRA_BOLD = 800
 const TTF_FONT_WEIGHT_BLACK = 900
 const TTF_FONT_WEIGHT_EXTRA_BLACK = 950
 
-type TTF_HorizontalAlignment as long
-enum
+enum TTF_HorizontalAlignment
 	TTF_HORIZONTAL_ALIGN_INVALID = -1
 	TTF_HORIZONTAL_ALIGN_LEFT
 	TTF_HORIZONTAL_ALIGN_CENTER
@@ -136,8 +134,7 @@ declare function TTF_FontIsScalable(byval font as const TTF_Font ptr) as boolean
 declare function TTF_GetFontFamilyName(byval font as const TTF_Font ptr) as const zstring ptr
 declare function TTF_GetFontStyleName(byval font as const TTF_Font ptr) as const zstring ptr
 
-type TTF_Direction as long
-enum
+enum TTF_Direction
 	TTF_DIRECTION_INVALID = 0
 	TTF_DIRECTION_LTR = 4
 	TTF_DIRECTION_RTL
@@ -155,8 +152,7 @@ declare function TTF_GetGlyphScript(byval ch as Uint32) as Uint32
 declare function TTF_SetFontLanguage(byval font as TTF_Font ptr, byval language_bcp47 as const zstring ptr) as boolean
 declare function TTF_FontHasGlyph(byval font as TTF_Font ptr, byval ch as Uint32) as boolean
 
-type TTF_ImageType as long
-enum
+enum TTF_ImageType
 	TTF_IMAGE_INVALID
 	TTF_IMAGE_ALPHA
 	TTF_IMAGE_COLOR
@@ -222,8 +218,7 @@ end type
 declare function TTF_GetGPUTextDrawData(byval text as TTF_Text ptr) as TTF_GPUAtlasDrawSequence ptr
 declare sub TTF_DestroyGPUTextEngine(byval engine as TTF_TextEngine ptr)
 
-type TTF_GPUTextEngineWinding as long
-enum
+enum TTF_GPUTextEngineWinding
 	TTF_GPU_TEXTENGINE_WINDING_INVALID = -1
 	TTF_GPU_TEXTENGINE_WINDING_CLOCKWISE
 	TTF_GPU_TEXTENGINE_WINDING_COUNTER_CLOCKWISE

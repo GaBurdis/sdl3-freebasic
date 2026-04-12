@@ -37,6 +37,11 @@ enum
 	SDL_MOUSEWHEEL_FLIPPED
 end enum
 
+type SDL_CursorFrameInfo
+    surface as SDL_Surface ptr
+    duration as Uint32
+end type
+
 type SDL_MouseButtonFlags as Uint32
 
 const SDL_BUTTON_LEFT   = 1
@@ -52,6 +57,8 @@ const SDL_BUTTON_X2     = 5
 #define SDL_BUTTON_X1MASK SDL_BUTTON_MASK(SDL_BUTTON_X1)
 #define SDL_BUTTON_X2MASK SDL_BUTTON_MASK(SDL_BUTTON_X2)
 
+type SDL_MouseMotionTransformCallback as sub(byval userdata as any ptr, byval timestamp as Uint64, byval window as SDL_Window ptr, mouseID as SDL_MouseID, byval x as single ptr, byval y as single ptr)
+
 declare function SDL_HasMouse() as boolean
 declare function SDL_GetMice(byval count as long ptr) as SDL_MouseID ptr
 declare function SDL_GetMouseNameForID(byval instance_id as SDL_MouseID) as const zstring ptr
@@ -61,11 +68,13 @@ declare function SDL_GetGlobalMouseState(byval x as single ptr, byval y as singl
 declare function SDL_GetRelativeMouseState(byval x as single ptr, byval y as single ptr) as SDL_MouseButtonFlags
 declare sub SDL_WarpMouseInWindow(byval window as SDL_Window ptr, byval x as single, byval y as single)
 declare function SDL_WarpMouseGlobal(byval x as single, byval y as single) as boolean
+declare function SDL_SetRelativeMouseTransform(byval callback as SDL_MouseMotionTransformCallback, byval userdata as any ptr) as boolean
 declare function SDL_SetWindowRelativeMouseMode(byval window as SDL_Window ptr, byval enabled as boolean) as boolean
 declare function SDL_GetWindowRelativeMouseMode(byval window as SDL_Window ptr) as boolean
 declare function SDL_CaptureMouse(byval enabled as boolean) as boolean
 declare function SDL_CreateCursor(byval data as const Uint8 ptr, byval mask as const Uint8 ptr, byval w as long, byval h as long, byval hot_x as long, byval hot_y as long) as SDL_Cursor ptr
 declare function SDL_CreateColorCursor(byval surface as SDL_Surface ptr, byval hot_x as long, byval hot_y as long) as SDL_Cursor ptr
+declare function SDL_CreateAnimatedCursor(byval frames as SDL_CursorFrameInfo ptr, byval frame_count as long, byval hot_x as long, byval hot_y as long) as SDL_Cursor ptr
 declare function SDL_CreateSystemCursor(byval id as SDL_SystemCursor) as SDL_Cursor ptr
 declare function SDL_SetCursor(byval cursor as SDL_Cursor ptr) as boolean
 declare function SDL_GetCursor() as SDL_Cursor ptr

@@ -4,7 +4,7 @@ FreeBasic bindings:
 
 Lib | Version |
 --- | ------- |
-[SDL3](https://github.com/libsdl-org/SDL) | 3.2.18 |
+[SDL3](https://github.com/libsdl-org/SDL) | 3.4.4 |
 [SDL3_image](https://github.com/libsdl-org/SDL_image) | 3.2.4 |
 [SDL3_ttf](https://github.com/libsdl-org/SDL_ttf) | 3.2.2 |
 
@@ -12,7 +12,7 @@ Lib | Version |
 This project is at an early stage, and feature testing is underway in Windows 10. The FreeBASIC version is used 1.10.1 x64
 
 ## Requirements
-You need to have SDL3 (at least version 3.2.18) installed as shared library. That means at runtime, it is trying to load SDL:
+You need to have SDL3 (at least version 3.4.4) installed as shared library. That means at runtime, it is trying to load SDL:
 - Windows: `SDL3.dll`
 
 ## Example

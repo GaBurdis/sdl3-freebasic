@@ -16,6 +16,7 @@ enum
 	SDL_SCALEMODE_INVALID = -1
     SDL_SCALEMODE_NEAREST
 	SDL_SCALEMODE_LINEAR
+    SDL_SCALEMODE_PIXELART
 end enum
 
 type SDL_FlipMode as long
@@ -23,6 +24,7 @@ enum
 	SDL_FLIP_NONE
 	SDL_FLIP_HORIZONTAL
 	SDL_FLIP_VERTICAL
+    SDL_FLIP_HORIZONTAL_AND_VERTICAL = (SDL_FLIP_HORIZONTAL or SDL_FLIP_VERTICAL)
 end enum
 
 #ifndef SDL_INTERNAL
@@ -50,6 +52,8 @@ declare function SDL_GetSurfaceProperties(byval surface as SDL_Surface ptr) as S
 #define SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING "SDL.surface.tonemap"
 #define SDL_PROP_SURFACE_HOTSPOT_X_NUMBER        "SDL.surface.hotspot.x"
 #define SDL_PROP_SURFACE_HOTSPOT_Y_NUMBER        "SDL.surface.hotspot.y"
+#define SDL_PROP_SURFACE_ROTATION_FLOAT          "SDL.surface.rotation"
+
 
 declare function SDL_SetSurfaceColorspace(byval surface as SDL_Surface ptr, byval colorspace as SDL_Colorspace) as boolean
 declare function SDL_GetSurfaceColorspace(byval surface as SDL_Surface ptr) as SDL_Colorspace
@@ -62,10 +66,16 @@ declare function SDL_GetSurfaceImages(byval surface as SDL_Surface ptr, byval co
 declare sub SDL_RemoveSurfaceAlternateImages(byval surface as SDL_Surface ptr)
 declare function SDL_LockSurface(byval surface as SDL_Surface ptr) as boolean
 declare sub SDL_UnlockSurface(byval surface as SDL_Surface ptr)
+declare function SDL_LoadSurface_IO(byval src as SDL_IOStream ptr, byval closeio as boolean) as SDL_Surface ptr
+declare function SDL_LoadSurface(byval file as const zstring ptr) as SDL_Surface ptr
 declare function SDL_LoadBMP_IO(byval src as SDL_IOStream ptr, byval closeio as boolean) as SDL_Surface ptr
 declare function SDL_LoadBMP(byval file as const zstring ptr) as SDL_Surface ptr
 declare function SDL_SaveBMP_IO(byval surface as SDL_Surface ptr, byval dst as SDL_IOStream ptr, byval closeio as boolean) as boolean
 declare function SDL_SaveBMP(byval surface as SDL_Surface ptr, byval file as const zstring ptr) as boolean
+declare function SDL_LoadPNG_IO(byval src as SDL_IOStream ptr, byval closeio as boolean) as SDL_Surface ptr
+declare function SDL_LoadPNG(byval file as const zstring ptr) as SDL_Surface ptr
+declare function SDL_SavePNG_IO(byval surface as SDL_Surface ptr, byval dst as SDL_IOStream ptr, byval closeio as boolean) as boolean
+declare function SDL_SavePNG(byval surface as SDL_Surface ptr, byval file as const zstring ptr) as boolean
 declare function SDL_SetSurfaceRLE(byval surface as SDL_Surface ptr, byval enabled as boolean) as boolean
 declare function SDL_SurfaceHasRLE(byval surface as SDL_Surface ptr) as boolean
 declare function SDL_SetSurfaceColorKey(byval surface as SDL_Surface ptr, byval enabled as boolean, byval key as Uint32) as boolean
@@ -80,6 +90,7 @@ declare function SDL_GetSurfaceBlendMode(byval surface as SDL_Surface ptr, byval
 declare function SDL_SetSurfaceClipRect(byval surface as SDL_Surface ptr, byval rect as const SDL_Rect ptr) as boolean
 declare function SDL_GetSurfaceClipRect(byval surface as SDL_Surface ptr, byval rect as SDL_Rect ptr) as boolean
 declare function SDL_FlipSurface(byval surface as SDL_Surface ptr, byval flip as SDL_FlipMode) as boolean
+declare function SDL_RotateSurface(byval surface as SDL_Surface ptr, byval angle as single) as SDL_Surface ptr
 declare function SDL_DuplicateSurface(byval surface as SDL_Surface ptr) as SDL_Surface ptr
 declare function SDL_ScaleSurface(byval surface as SDL_Surface ptr, byval width as long, byval height as long, byval scaleMode as SDL_ScaleMode) as SDL_Surface ptr
 declare function SDL_ConvertSurface(byval surface as SDL_Surface ptr, byval format as SDL_PixelFormat) as SDL_Surface ptr

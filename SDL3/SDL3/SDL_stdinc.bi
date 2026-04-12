@@ -31,23 +31,23 @@
 '  #endif
 '#endif
 
-#ifdef SDL_WIKI_DOCUMENTATION_SECTION
-  #define SDL_NOLONGLONG 1
-#endif
+'#ifdef SDL_WIKI_DOCUMENTATION_SECTION
+'  #define SDL_NOLONGLONG 1
+'#endif
 
-#ifdef SDL_WIKI_DOCUMENTATION_SECTION
-  #define SDL_SIZE_MAX SIZE_MAX
-#elseif defined(SIZE_MAX)
-  #define SDL_SIZE_MAX SIZE_MAX
-#else
-  #define SDL_SIZE_MAX ((size_t) -1)
-#endif
+'#ifdef SDL_WIKI_DOCUMENTATION_SECTION
+'  #define SDL_SIZE_MAX SIZE_MAX
+'#elseif defined(SIZE_MAX)
+'  #define SDL_SIZE_MAX SIZE_MAX
+'#else
+'  #define SDL_SIZE_MAX ((size_t) -1)
+'#endif
 
-#ifndef SDL_COMPILE_TIME_ASSERT
-  #ifdef SDL_WIKI_DOCUMENTATION_SECTION
-    #define SDL_COMPILE_TIME_ASSERT(name, x) FailToCompileIf_x_IsFalse(x)
-  #endif
-#endif
+'#ifndef SDL_COMPILE_TIME_ASSERT
+'  #ifdef SDL_WIKI_DOCUMENTATION_SECTION
+'    #define SDL_COMPILE_TIME_ASSERT(name, x) FailToCompileIf_x_IsFalse(x)
+'  #endif
+'#endif
 
 '#ifndef SDL_COMPILE_TIME_ASSERT
 '' TODO: #define SDL_COMPILE_TIME_ASSERT(name, x) typedef int SDL_compile_time_assert_ ## name[(x) * 2 - 1]
@@ -55,7 +55,7 @@
 
 '#define SDL_arraysize(array) (sizeof(array)/sizeof(@array(0))) ' not work on FB
 
-#define SDL_STRINGIFY_ARG(arg) #arg
+'#define SDL_STRINGIFY_ARG(arg) #arg
 
 #define SDL_reinterpret_cast(type, expression) type(expression)
 #define SDL_static_cast(type, expression) type(expression)
@@ -70,8 +70,8 @@
 #ifndef SDL_SINT64_C
   #if defined(INT64_C)
     #define SDL_SINT64_C(c)  INT64_C(c)
-  #elseif defined(_MSC_VER)
-    #define SDL_SINT64_C(c)  c##i64
+'  #elseif defined(_MSC_VER)
+'    #define SDL_SINT64_C(c)  c##i64
   #elseif defined(__FB_64BIT__)
     #define SDL_SINT64_C(c)  c##L
   #else
@@ -82,8 +82,8 @@
 #ifndef SDL_UINT64_C
   #if defined(UINT64_C)
     #define SDL_UINT64_C(c)  UINT64_C(c)
-  #elseif defined(_MSC_VER)
-    #define SDL_UINT64_C(c)  c##ui64
+'  #elseif defined(_MSC_VER)
+'    #define SDL_UINT64_C(c)  c##ui64
   #elseif defined(__FB_64BIT__)
     #define SDL_UINT64_C(c)  c##UL
   #else
@@ -266,7 +266,7 @@ type SDL_Time as Sint64
    #endif
 #endif
 
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+'#ifndef DOXYGEN_SHOULD_IGNORE_THIS
 '' TODO: SDL_COMPILE_TIME_ASSERT(bool_size, sizeof(boolean) == 1);
 '' TODO: SDL_COMPILE_TIME_ASSERT(uint8_size, sizeof(Uint8) == 1);
 '' TODO: SDL_COMPILE_TIME_ASSERT(sint8_size, sizeof(Sint8) == 1);
@@ -278,23 +278,23 @@ type SDL_Time as Sint64
 '' TODO: SDL_COMPILE_TIME_ASSERT(sint64_size, sizeof(Sint64) == 8);
 '' TODO: SDL_COMPILE_TIME_ASSERT(uint64_longlong, sizeof(Uint64) <= sizeof(unsigned long long));
 '' TODO: SDL_COMPILE_TIME_ASSERT(size_t_longlong, sizeof(size_t) <= sizeof(unsigned long long));
-type SDL_alignment_test
-	a as Uint8
-	b as any ptr
-end type
+'type SDL_alignment_test
+'	a as Uint8
+'	b as any ptr
+'end type
 '' TODO: SDL_COMPILE_TIME_ASSERT(struct_alignment, sizeof(SDL_alignment_test) == (2 * sizeof(void *)));
 '' TODO: SDL_COMPILE_TIME_ASSERT(two_s_complement, (int)~(int)0 == (int)(-1));
-#endif
+'#endif
 
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
-  #if (not defined(SDL_PLATFORM_VITA)) and (not defined(SDL_PLATFORM_3DS))
-  type SDL_DUMMY_ENUM as long
-  enum
-  	DUMMY_ENUM_VALUE
-  end enum
+'#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+'  #if (not defined(SDL_PLATFORM_VITA)) and (not defined(SDL_PLATFORM_3DS))
+'  type SDL_DUMMY_ENUM as long
+'  enum
+'  	DUMMY_ENUM_VALUE
+'  end enum
   '' TODO: SDL_COMPILE_TIME_ASSERT(enum, sizeof(SDL_DUMMY_ENUM) == sizeof(int));
-  #endif
-#endif
+'  #endif
+'#endif
 
 extern "C"
 
@@ -558,17 +558,17 @@ const SDL_ICONV_EINVAL = cuint(-4)
 declare function SDL_iconv_string(byval tocode as const zstring ptr, byval fromcode as const zstring ptr, byval inbuf as const zstring ptr, byval inbytesleft as uinteger) as zstring ptr
 
 #define SDL_iconv_utf8_locale(S) SDL_iconv_string("", "UTF-8", S, SDL_strlen(S) + 1)
-#define SDL_iconv_utf8_ucs2(S) cptr(Uint16 ptr, SDL_iconv_string("UCS-2", "UTF-8", S, SDL_strlen(S) + 1))
-#define SDL_iconv_utf8_ucs4(S) cptr(Uint32 ptr, SDL_iconv_string("UCS-4", "UTF-8", S, SDL_strlen(S) + 1))
-#define SDL_iconv_wchar_utf8(S) SDL_iconv_string("UTF-8", "WCHAR_T", cptr(zstring ptr, S), (SDL_wcslen(S) + 1) * sizeof(wchar_t))
+#define SDL_iconv_utf8_ucs2(S) SDL_reinterpret_cast(Uint16 ptr, SDL_iconv_string("UCS-2", "UTF-8", S, SDL_strlen(S)+1))
+#define SDL_iconv_utf8_ucs4(S) SDL_reinterpret_cast(Uint32 ptr, SDL_iconv_string("UCS-4", "UTF-8", S, SDL_strlen(S)+1))
+#define SDL_iconv_wchar_utf8(S) SDL_iconv_string("UTF-8", "WCHAR_T", SDL_reinterpret_cast(const zstring ptr, S), (SDL_wcslen(S)+1) * sizeof(wchar_t))
 
-private function SDL_size_mul_check_overflow(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
-	if (a <> 0) andalso (b > (cuint(-1) / a)) then
-		return false
-	end if
-	(*ret) = a * b
-	return true
-end function
+'private function SDL_size_mul_check_overflow(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
+'	if (a <> 0) andalso (b > (cuint(-1) / a)) then
+'		return false
+'	end if
+'	(*ret) = a * b
+'	return true
+'end function
 
 #ifdef __has_builtin
  #define SDL_HAS_BUILTIN(x) __has_builtin(x)
@@ -576,31 +576,31 @@ end function
  #define SDL_HAS_BUILTIN(x) 0
 #endif
 
-#ifndef SDL_WIKI_DOCUMENTATION_SECTION
-  #if SDL_HAS_BUILTIN(__builtin_mul_overflow) 
-    private function SDL_size_mul_check_overflow_builtin(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
-      return __builtin_mul_overflow(a, b, ret) = 0 : 0 : -1
-    end function
-    #define SDL_size_mul_check_overflow(a, b, ret) (SDL_size_mul_check_overflow_builtin(a, b, ret))
-  #endif
-#endif
+'#ifndef SDL_WIKI_DOCUMENTATION_SECTION
+'  #if SDL_HAS_BUILTIN(__builtin_mul_overflow) 
+'    private function SDL_size_mul_check_overflow_builtin(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
+'      return __builtin_mul_overflow(a, b, ret) = 0 : 0 : -1
+'    end function
+'    #define SDL_size_mul_check_overflow(a, b, ret) (SDL_size_mul_check_overflow_builtin(a, b, ret))
+'  #endif
+'#endif
 
-private function SDL_size_add_check_overflow(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
-	if b > (cuint(-1) - a) then
-		return false
-	end if
-	(*ret) = a + b
-	return true
-end function
+'private function SDL_size_add_check_overflow(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
+'	if b > (cuint(-1) - a) then
+'		return false
+'	end if
+'	(*ret) = a + b
+'	return true
+'end function
 
-#ifndef SDL_WIKI_DOCUMENTATION_SECTION
-  #if SDL_HAS_BUILTIN(__builtin_add_overflow)
-    private function SDL_size_add_check_overflow_builtin(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
-      return __builtin_add_overflow(a, b, ret) = 0 : 0 : -1
-    end function
-    #define SDL_size_add_check_overflow(a, b, ret) (SDL_size_add_check_overflow_builtin(a, b, ret))
-  #endif
-#endif
+'#ifndef SDL_WIKI_DOCUMENTATION_SECTION
+'  #if SDL_HAS_BUILTIN(__builtin_add_overflow)
+'    private function SDL_size_add_check_overflow_builtin(byval a as uinteger, byval b as uinteger, byval ret as uinteger ptr) as boolean
+'      return __builtin_add_overflow(a, b, ret) = 0 : 0 : -1
+'    end function
+'    #define SDL_size_add_check_overflow(a, b, ret) (SDL_size_add_check_overflow_builtin(a, b, ret))
+'  #endif
+'#endif
 
 type SDL_FunctionPointer as sub()
 

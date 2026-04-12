@@ -38,6 +38,10 @@ declare function SDL_hid_enumerate(byval vendor_id as ushort, byval product_id a
 declare sub SDL_hid_free_enumeration(byval devs as SDL_hid_device_info ptr)
 declare function SDL_hid_open(byval vendor_id as ushort, byval product_id as ushort, byval serial_number as const wstring ptr) as SDL_hid_device ptr
 declare function SDL_hid_open_path(byval path as const zstring ptr) as SDL_hid_device ptr
+declare function SDL_hid_get_properties(byval dev as SDL_hid_device ptr) as SDL_PropertiesID
+
+#define SDL_PROP_HIDAPI_LIBUSB_DEVICE_HANDLE_POINTER   "SDL.hidapi.libusb.device.handle"
+
 declare function SDL_hid_write(byval dev as SDL_hid_device ptr, byval data as const ubyte ptr, byval length as uinteger) as long
 declare function SDL_hid_read_timeout(byval dev as SDL_hid_device ptr, byval data as ubyte ptr, byval length as uinteger, byval milliseconds as long) as long
 declare function SDL_hid_read(byval dev as SDL_hid_device ptr, byval data as ubyte ptr, byval length as uinteger) as long

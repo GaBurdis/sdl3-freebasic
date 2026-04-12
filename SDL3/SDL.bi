@@ -1,8 +1,8 @@
-'' FreeBASIC binding for SDL3-3.2.18
+'' FreeBASIC binding for SDL3-3.4.4
 ''
 '' based on the C header files:
 ''   Simple DirectMedia Layer
-''   Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+''   Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 ''
 ''   This software is provided 'as-is', without any express or implied
 ''   warranty.  In no event will the authors be held liable for any damages
@@ -52,11 +52,12 @@
 #include "SDL3/SDL_events.bi"
 #include "SDL3/SDL_init.bi"
 #include "SDL3/SDL_log.bi"
+#include "SDL3/SDL_gpu.bi"
 #include "SDL3/SDL_render.bi"
 #include "SDL3/SDL_timer.bi"
 #include "SDL3/SDL_filesystem.bi"
 
-#include "SDL3/SDL_assert.bi"
+'#include "SDL3/SDL_assert.bi"
 #include "SDL3/SDL_asyncio.bi"
 #include "SDL3/SDL_atomic.bi"
 #include "SDL3/SDL_bits.bi"
@@ -65,7 +66,6 @@
 #include "SDL3/SDL_dialog.bi"
 #include "SDL3/SDL_endian.bi"
 #include "SDL3/SDL_gamepad.bi"
-#include "SDL3/SDL_gpu.bi"
 #include "SDL3/SDL_haptic.bi"
 #include "SDL3/SDL_hidapi.bi"
 #include "SDL3/SDL_hints.bi"

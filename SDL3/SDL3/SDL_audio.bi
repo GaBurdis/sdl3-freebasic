@@ -81,6 +81,9 @@ declare sub SDL_UnbindAudioStream(byval stream as SDL_AudioStream ptr)
 declare function SDL_GetAudioStreamDevice(byval stream as SDL_AudioStream ptr) as SDL_AudioDeviceID
 declare function SDL_CreateAudioStream(byval src_spec as const SDL_AudioSpec ptr, byval dst_spec as const SDL_AudioSpec ptr) as SDL_AudioStream ptr
 declare function SDL_GetAudioStreamProperties(byval stream as SDL_AudioStream ptr) as SDL_PropertiesID
+
+#define SDL_PROP_AUDIOSTREAM_AUTO_CLEANUP_BOOLEAN "SDL.audiostream.auto_cleanup"
+
 declare function SDL_GetAudioStreamFormat(byval stream as SDL_AudioStream ptr, byval src_spec as SDL_AudioSpec ptr, byval dst_spec as SDL_AudioSpec ptr) as boolean
 declare function SDL_SetAudioStreamFormat(byval stream as SDL_AudioStream ptr, byval src_spec as const SDL_AudioSpec ptr, byval dst_spec as const SDL_AudioSpec ptr) as boolean
 declare function SDL_GetAudioStreamFrequencyRatio(byval stream as SDL_AudioStream ptr) as single
@@ -92,6 +95,11 @@ declare function SDL_GetAudioStreamOutputChannelMap(byval stream as SDL_AudioStr
 declare function SDL_SetAudioStreamInputChannelMap(byval stream as SDL_AudioStream ptr, byval chmap as const long ptr, byval count as long) as boolean
 declare function SDL_SetAudioStreamOutputChannelMap(byval stream as SDL_AudioStream ptr, byval chmap as const long ptr, byval count as long) as boolean
 declare function SDL_PutAudioStreamData(byval stream as SDL_AudioStream ptr, byval buf as const any ptr, byval len as long) as boolean
+
+type SDL_AudioStreamDataCompleteCallback as sub(byval userdata as any ptr, byval buf as const any ptr, byval buflen as long)
+
+declare function SDL_PutAudioStreamDataNoCopy(byval stream as SDL_AudioStream ptr, byval buf as const any ptr, byval len as long, byval callback as SDL_AudioStreamDataCompleteCallback, byval userdata as any ptr) as boolean
+declare function SDL_PutAudioStreamPlanarData(byval stream as SDL_AudioStream ptr, byval channel_buffers as const any ptr, byval num_channels as long, byval num_samples as long) as boolean
 declare function SDL_GetAudioStreamData(byval stream as SDL_AudioStream ptr, byval buf as any ptr, byval len as long) as long
 declare function SDL_GetAudioStreamAvailable(byval stream as SDL_AudioStream ptr) as long
 declare function SDL_GetAudioStreamQueued(byval stream as SDL_AudioStream ptr) as long

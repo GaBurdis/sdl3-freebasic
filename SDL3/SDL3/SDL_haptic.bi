@@ -4,6 +4,10 @@ extern "C"
 
 type SDL_Haptic as _SDL_Haptic
 
+const SDL_HAPTIC_INFINITY = 4294967295U
+
+type SDL_HapticEffectType as Uint16
+
 const SDL_HAPTIC_CONSTANT = culng(1u shl 0)
 const SDL_HAPTIC_SINE = culng(1u shl 1)
 const SDL_HAPTIC_SQUARE = culng(1u shl 2)
@@ -25,20 +29,22 @@ const SDL_HAPTIC_AUTOCENTER = culng(1u shl 17)
 const SDL_HAPTIC_STATUS = culng(1u shl 18)
 const SDL_HAPTIC_PAUSE = culng(1u shl 19)
 
+type SDL_HapticDirectionType as Uint8
+
 const SDL_HAPTIC_POLAR = 0
 const SDL_HAPTIC_CARTESIAN = 1
 const SDL_HAPTIC_SPHERICAL = 2
 const SDL_HAPTIC_STEERING_AXIS = 3
 
-const SDL_HAPTIC_INFINITY = 4294967295u
+type SDL_HapticEffectID as long
 
 type SDL_HapticDirection
-	as Uint8 type
+	as SDL_HapticEffectID type
 	dir(0 to 2) as Sint32
 end type
 
 type SDL_HapticConstant
-	as Uint16 type
+	as SDL_HapticEffectType type
 	direction as SDL_HapticDirection
 	length as Uint32
 	delay as Uint16
@@ -52,7 +58,7 @@ type SDL_HapticConstant
 end type
 
 type SDL_HapticPeriodic
-	as Uint16 type
+	as SDL_HapticEffectType type
 	direction as SDL_HapticDirection
 	length as Uint32
 	delay as Uint16
@@ -69,7 +75,7 @@ type SDL_HapticPeriodic
 end type
 
 type SDL_HapticCondition
-	as Uint16 type
+	as SDL_HapticEffectType type
 	direction as SDL_HapticDirection
 	length as Uint32
 	delay as Uint16
@@ -84,7 +90,7 @@ type SDL_HapticCondition
 end type
 
 type SDL_HapticRamp
-	as Uint16 type
+	as SDL_HapticEffectType type
 	direction as SDL_HapticDirection
 	length as Uint32
 	delay as Uint16
@@ -99,14 +105,14 @@ type SDL_HapticRamp
 end type
 
 type SDL_HapticLeftRight
-	as Uint16 type
+	as SDL_HapticEffectType type
 	length as Uint32
 	large_magnitude as Uint16
 	small_magnitude as Uint16
 end type
 
 type SDL_HapticCustom
-	as Uint16 type
+	as SDL_HapticEffectType type
 	direction as SDL_HapticDirection
 	length as Uint32
 	delay as Uint16
@@ -123,7 +129,7 @@ type SDL_HapticCustom
 end type
 
 union SDL_HapticEffect
-	as Uint16 type
+	as SDL_HapticEffectType type
 	constant as SDL_HapticConstant
 	periodic as SDL_HapticPeriodic
 	condition as SDL_HapticCondition
@@ -150,12 +156,12 @@ declare function SDL_GetMaxHapticEffectsPlaying(byval haptic as SDL_Haptic ptr) 
 declare function SDL_GetHapticFeatures(byval haptic as SDL_Haptic ptr) as Uint32
 declare function SDL_GetNumHapticAxes(byval haptic as SDL_Haptic ptr) as long
 declare function SDL_HapticEffectSupported(byval haptic as SDL_Haptic ptr, byval effect as const SDL_HapticEffect ptr) as boolean
-declare function SDL_CreateHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as const SDL_HapticEffect ptr) as long
-declare function SDL_UpdateHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as long, byval data as const SDL_HapticEffect ptr) as boolean
-declare function SDL_RunHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as long, byval iterations as Uint32) as boolean
-declare function SDL_StopHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as long) as boolean
-declare sub SDL_DestroyHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as long)
-declare function SDL_GetHapticEffectStatus(byval haptic as SDL_Haptic ptr, byval effect as long) as boolean
+declare function SDL_CreateHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as const SDL_HapticEffect ptr) as SDL_HapticEffectID
+declare function SDL_UpdateHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as SDL_HapticEffectID, byval data as const SDL_HapticEffect ptr) as boolean
+declare function SDL_RunHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as SDL_HapticEffectID, byval iterations as Uint32) as boolean
+declare function SDL_StopHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as SDL_HapticEffectID) as boolean
+declare sub SDL_DestroyHapticEffect(byval haptic as SDL_Haptic ptr, byval effect as SDL_HapticEffectID)
+declare function SDL_GetHapticEffectStatus(byval haptic as SDL_Haptic ptr, byval effect as SDL_HapticEffectID) as boolean
 declare function SDL_SetHapticGain(byval haptic as SDL_Haptic ptr, byval gain as long) as boolean
 declare function SDL_SetHapticAutocenter(byval haptic as SDL_Haptic ptr, byval autocenter as long) as boolean
 declare function SDL_PauseHaptic(byval haptic as SDL_Haptic ptr) as boolean

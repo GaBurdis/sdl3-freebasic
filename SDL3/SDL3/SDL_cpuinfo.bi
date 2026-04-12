@@ -22,5 +22,6 @@ declare function SDL_HasLSX() as boolean
 declare function SDL_HasLASX() as boolean
 declare function SDL_GetSystemRAM() as long
 declare function SDL_GetSIMDAlignment() as uinteger
+declare function SDL_GetSystemPageSize() as long
 
 end extern

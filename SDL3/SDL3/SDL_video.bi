@@ -61,6 +61,7 @@ type SDL_WindowFlags as Uint64
 #define SDL_WINDOW_TOOLTIP              SDL_UINT64_C(&h0000000000040000)
 #define SDL_WINDOW_POPUP_MENU           SDL_UINT64_C(&h0000000000080000)
 #define SDL_WINDOW_KEYBOARD_GRABBED     SDL_UINT64_C(&h0000000000100000)
+#define SDL_WINDOW_FILL_DOCUMENT        SDL_UINT64_C(&h0000000000200000)
 #define SDL_WINDOW_VULKAN               SDL_UINT64_C(&h0000000010000000)
 #define SDL_WINDOW_METAL                SDL_UINT64_C(&h0000000020000000)
 #define SDL_WINDOW_TRANSPARENT          SDL_UINT64_C(&h0000000040000000)
@@ -81,6 +82,16 @@ enum
 	SDL_FLASH_CANCEL
 	SDL_FLASH_BRIEFLY
 	SDL_FLASH_UNTIL_FOCUSED
+end enum
+
+type SDL_ProgressState as long
+enum
+    SDL_PROGRESS_STATE_INVALID = -1
+    SDL_PROGRESS_STATE_NONE
+    SDL_PROGRESS_STATE_INDETERMINATE
+    SDL_PROGRESS_STATE_NORMAL
+    SDL_PROGRESS_STATE_PAUSED
+    SDL_PROGRESS_STATE_ERROR 
 end enum
 
 type SDL_GLContext as SDL_GLContextState ptr
@@ -157,8 +168,10 @@ declare function SDL_GetDisplays(byval count as long ptr) as SDL_DisplayID ptr
 declare function SDL_GetPrimaryDisplay() as SDL_DisplayID
 declare function SDL_GetDisplayProperties(byval displayID as SDL_DisplayID) as SDL_PropertiesID
 
-#define SDL_PROP_DISPLAY_HDR_ENABLED_BOOLEAN "SDL.display.HDR_enabled"
+#define SDL_PROP_DISPLAY_HDR_ENABLED_BOOLEAN             "SDL.display.HDR_enabled"
 #define SDL_PROP_DISPLAY_KMSDRM_PANEL_ORIENTATION_NUMBER "SDL.display.KMSDRM.panel_orientation"
+#define SDL_PROP_DISPLAY_WAYLAND_WL_OUTPUT_POINTER       "SDL.display.wayland.wl_output"
+#define SDL_PROP_DISPLAY_WINDOWS_HMONITOR_POINTER        "SDL.display.windows.hmonitor"
 
 declare function SDL_GetDisplayName(byval displayID as SDL_DisplayID) as const zstring ptr
 declare function SDL_GetDisplayBounds(byval displayID as SDL_DisplayID, byval rect as SDL_Rect ptr) as boolean
@@ -213,12 +226,15 @@ declare function SDL_CreateWindowWithProperties(byval props as SDL_PropertiesID)
 #define SDL_PROP_WINDOW_CREATE_Y_NUMBER "SDL.window.create.y"
 #define SDL_PROP_WINDOW_CREATE_COCOA_WINDOW_POINTER "SDL.window.create.cocoa.window"
 #define SDL_PROP_WINDOW_CREATE_COCOA_VIEW_POINTER "SDL.window.create.cocoa.view"
+#define SDL_PROP_WINDOW_CREATE_WINDOWSCENE_POINTER "SDL.window.create.uikit.windowscene"
 #define SDL_PROP_WINDOW_CREATE_WAYLAND_SURFACE_ROLE_CUSTOM_BOOLEAN "SDL.window.create.wayland.surface_role_custom"
 #define SDL_PROP_WINDOW_CREATE_WAYLAND_CREATE_EGL_WINDOW_BOOLEAN "SDL.window.create.wayland.create_egl_window"
 #define SDL_PROP_WINDOW_CREATE_WAYLAND_WL_SURFACE_POINTER "SDL.window.create.wayland.wl_surface"
 #define SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER "SDL.window.create.win32.hwnd"
 #define SDL_PROP_WINDOW_CREATE_WIN32_PIXEL_FORMAT_HWND_POINTER "SDL.window.create.win32.pixel_format_hwnd"
 #define SDL_PROP_WINDOW_CREATE_X11_WINDOW_NUMBER "SDL.window.create.x11.window"
+#define SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_CANVAS_ID_STRING "SDL.window.create.emscripten.canvas_id"
+#define SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING  "SDL.window.create.emscripten.keyboard_element"
 
 declare function SDL_GetWindowID(byval window as SDL_Window ptr) as SDL_WindowID
 declare function SDL_GetWindowFromID(byval id as SDL_WindowID) as SDL_Window ptr
@@ -241,7 +257,7 @@ declare function SDL_GetWindowProperties(byval window as SDL_Window ptr) as SDL_
 #define SDL_PROP_WINDOW_KMSDRM_GBM_DEVICE_POINTER "SDL.window.kmsdrm.gbm_dev"
 #define SDL_PROP_WINDOW_COCOA_WINDOW_POINTER "SDL.window.cocoa.window"
 #define SDL_PROP_WINDOW_COCOA_METAL_VIEW_TAG_NUMBER "SDL.window.cocoa.metal_view_tag"
-#define SDL_PROP_WINDOW_OPENVR_OVERLAY_ID "SDL.window.openvr.overlay_id"
+#define SDL_PROP_WINDOW_OPENVR_OVERLAY_ID_NUMBER "SDL.window.openvr.overlay_id"
 #define SDL_PROP_WINDOW_VIVANTE_DISPLAY_POINTER "SDL.window.vivante.display"
 #define SDL_PROP_WINDOW_VIVANTE_WINDOW_POINTER "SDL.window.vivante.window"
 #define SDL_PROP_WINDOW_VIVANTE_SURFACE_POINTER "SDL.window.vivante.surface"
@@ -250,7 +266,7 @@ declare function SDL_GetWindowProperties(byval window as SDL_Window ptr) as SDL_
 #define SDL_PROP_WINDOW_WIN32_INSTANCE_POINTER "SDL.window.win32.instance"
 #define SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER "SDL.window.wayland.display"
 #define SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER "SDL.window.wayland.surface"
-#define SDL_PROP_WINDOW_WAYLAND_VIEWPORT_POINTER                    "SDL.window.wayland.viewport"
+#define SDL_PROP_WINDOW_WAYLAND_VIEWPORT_POINTER "SDL.window.wayland.viewport"
 #define SDL_PROP_WINDOW_WAYLAND_EGL_WINDOW_POINTER "SDL.window.wayland.egl_window"
 #define SDL_PROP_WINDOW_WAYLAND_XDG_SURFACE_POINTER "SDL.window.wayland.xdg_surface"
 #define SDL_PROP_WINDOW_WAYLAND_XDG_TOPLEVEL_POINTER "SDL.window.wayland.xdg_toplevel"
@@ -260,6 +276,8 @@ declare function SDL_GetWindowProperties(byval window as SDL_Window ptr) as SDL_
 #define SDL_PROP_WINDOW_X11_DISPLAY_POINTER "SDL.window.x11.display"
 #define SDL_PROP_WINDOW_X11_SCREEN_NUMBER "SDL.window.x11.screen"
 #define SDL_PROP_WINDOW_X11_WINDOW_NUMBER "SDL.window.x11.window"
+#define SDL_PROP_WINDOW_EMSCRIPTEN_CANVAS_ID_STRING "SDL.window.emscripten.canvas_id"
+#define SDL_PROP_WINDOW_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING "SDL.window.emscripten.keyboard_element"
 
 declare function SDL_GetWindowFlags(byval window as SDL_Window ptr) as SDL_WindowFlags
 declare function SDL_SetWindowTitle(byval window as SDL_Window ptr, byval title as const zstring ptr) as boolean
@@ -281,6 +299,7 @@ declare function SDL_GetWindowMaximumSize(byval window as SDL_Window ptr, byval 
 declare function SDL_SetWindowBordered(byval window as SDL_Window ptr, byval bordered as boolean) as boolean
 declare function SDL_SetWindowResizable(byval window as SDL_Window ptr, byval resizable as boolean) as boolean
 declare function SDL_SetWindowAlwaysOnTop(byval window as SDL_Window ptr, byval on_top as boolean) as boolean
+declare function SDL_SetWindowFillDocument(byval window as SDL_Window ptr, byval fill as boolean) as boolean
 declare function SDL_ShowWindow(byval window as SDL_Window ptr) as boolean
 declare function SDL_HideWindow(byval window as SDL_Window ptr) as boolean
 declare function SDL_RaiseWindow(byval window as SDL_Window ptr) as boolean
@@ -332,6 +351,10 @@ type SDL_HitTest as function(byval win as SDL_Window ptr, byval area as const SD
 declare function SDL_SetWindowHitTest(byval window as SDL_Window ptr, byval callback as SDL_HitTest, byval callback_data as any ptr) as boolean
 declare function SDL_SetWindowShape(byval window as SDL_Window ptr, byval shape as SDL_Surface ptr) as boolean
 declare function SDL_FlashWindow(byval window as SDL_Window ptr, byval operation as SDL_FlashOperation) as boolean
+declare function SDL_SetWindowProgressState(byval window as SDL_Window ptr, byval state as SDL_ProgressState) as boolean
+declare function SDL_GetWindowProgressState(byval window as SDL_Window ptr) as SDL_ProgressState
+declare function SDL_SetWindowProgressValue(byval window as SDL_Window ptr, byval value as single) as boolean
+declare function SDL_GetWindowProgressValue(byval window as SDL_Window ptr) as single
 declare sub SDL_DestroyWindow(byval window as SDL_Window ptr)
 declare function SDL_ScreenSaverEnabled() as boolean
 declare function SDL_EnableScreenSaver() as boolean

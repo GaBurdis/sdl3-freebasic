@@ -16,6 +16,7 @@ const SDL_PEN_INPUT_BUTTON_3 = culng(1u shl 3)
 const SDL_PEN_INPUT_BUTTON_4 = culng(1u shl 4)
 const SDL_PEN_INPUT_BUTTON_5 = culng(1u shl 5)
 const SDL_PEN_INPUT_ERASER_TIP = culng(1u shl 30)
+const SDL_PEN_INPUT_IN_PROXIMITY = culng(1u shl 31)
 
 type SDL_PenAxis as long
 enum
@@ -28,5 +29,15 @@ enum
 	SDL_PEN_AXIS_TANGENTIAL_PRESSURE
 	SDL_PEN_AXIS_COUNT
 end enum
+
+type SDL_PenDeviceType as long
+enum
+    SDL_PEN_DEVICE_TYPE_INVALID = -1
+    SDL_PEN_DEVICE_TYPE_UNKNOWN
+    SDL_PEN_DEVICE_TYPE_DIRECT
+    SDL_PEN_DEVICE_TYPE_INDIRECT
+end enum
+
+declare function SDL_GetPenDeviceType(byval instance_id as SDL_PenID) as SDL_PenDeviceType
 
 end extern

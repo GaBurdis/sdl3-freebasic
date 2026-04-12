@@ -14,6 +14,8 @@ enum
 	SDL_PROPERTY_TYPE_BOOLEAN
 end enum
 
+#define SDL_PROP_NAME_STRING "SDL.name"
+
 declare function SDL_GetGlobalProperties() as SDL_PropertiesID
 declare function SDL_CreateProperties() as SDL_PropertiesID
 declare function SDL_CopyProperties(byval src as SDL_PropertiesID, byval dst as SDL_PropertiesID) as boolean

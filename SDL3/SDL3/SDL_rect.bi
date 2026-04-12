@@ -27,10 +27,10 @@ type SDL_FRect
 end type
 
 private sub SDL_RectToFRect(byval rect as const SDL_Rect ptr, byval frect as SDL_FRect ptr)
-	frect->x = csng(rect->x)
-	frect->y = csng(rect->y)
-	frect->w = csng(rect->w)
-	frect->h = csng(rect->h)
+	frect->x = SDL_static_cast(CSng, rect->x)
+	frect->y = SDL_static_cast(CSng, rect->y)
+	frect->w = SDL_static_cast(CSng, rect->w)
+	frect->h = SDL_static_cast(CSng, rect->h)
 end sub
 
 private function SDL_PointInRect(byval p as const SDL_Point ptr, byval r as const SDL_Rect ptr) as boolean

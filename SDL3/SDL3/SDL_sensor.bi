@@ -17,6 +17,7 @@ enum
 	SDL_SENSOR_GYRO_L
 	SDL_SENSOR_ACCEL_R
 	SDL_SENSOR_GYRO_R
+    SDL_SENSOR_COUNT
 end enum
 
 declare function SDL_GetSensors(byval count as long ptr) as SDL_SensorID ptr

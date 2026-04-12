@@ -3,6 +3,8 @@
 extern "C"
 
 #define SDL_SOFTWARE_RENDERER "software"
+#define SDL_GPU_RENDERER      "gpu"
+
 
 type SDL_Vertex
 	position as SDL_FPoint
@@ -16,6 +18,15 @@ enum
 	SDL_TEXTUREACCESS_STREAMING
 	SDL_TEXTUREACCESS_TARGET
 end enum
+
+type SDL_TextureAddressMode as long
+enum
+    SDL_TEXTURE_ADDRESS_INVALID = -1
+    SDL_TEXTURE_ADDRESS_AUTO
+    SDL_TEXTURE_ADDRESS_CLAMP
+    SDL_TEXTURE_ADDRESS_WRAP
+end enum
+
 
 type SDL_RendererLogicalPresentation as long
 enum
@@ -50,6 +61,10 @@ declare function SDL_CreateRendererWithProperties(byval props as SDL_PropertiesI
 #define SDL_PROP_RENDERER_CREATE_SURFACE_POINTER "SDL.renderer.create.surface"
 #define SDL_PROP_RENDERER_CREATE_OUTPUT_COLORSPACE_NUMBER "SDL.renderer.create.output_colorspace"
 #define SDL_PROP_RENDERER_CREATE_PRESENT_VSYNC_NUMBER "SDL.renderer.create.present_vsync"
+#define SDL_PROP_RENDERER_CREATE_GPU_DEVICE_POINTER "SDL.renderer.create.gpu.device"
+#define SDL_PROP_RENDERER_CREATE_GPU_SHADERS_SPIRV_BOOLEAN "SDL.renderer.create.gpu.shaders_spirv"
+#define SDL_PROP_RENDERER_CREATE_GPU_SHADERS_DXIL_BOOLEAN "SDL.renderer.create.gpu.shaders_dxil"
+#define SDL_PROP_RENDERER_CREATE_GPU_SHADERS_MSL_BOOLEAN "SDL.renderer.create.gpu.shaders_msl"
 #define SDL_PROP_RENDERER_CREATE_VULKAN_INSTANCE_POINTER "SDL.renderer.create.vulkan.instance"
 #define SDL_PROP_RENDERER_CREATE_VULKAN_SURFACE_NUMBER "SDL.renderer.create.vulkan.surface"
 #define SDL_PROP_RENDERER_CREATE_VULKAN_PHYSICAL_DEVICE_POINTER "SDL.renderer.create.vulkan.physical_device"
@@ -57,6 +72,8 @@ declare function SDL_CreateRendererWithProperties(byval props as SDL_PropertiesI
 #define SDL_PROP_RENDERER_CREATE_VULKAN_GRAPHICS_QUEUE_FAMILY_INDEX_NUMBER "SDL.renderer.create.vulkan.graphics_queue_family_index"
 #define SDL_PROP_RENDERER_CREATE_VULKAN_PRESENT_QUEUE_FAMILY_INDEX_NUMBER "SDL.renderer.create.vulkan.present_queue_family_index"
 
+declare function SDL_CreateGPURenderer(byval device as SDL_GPUDevice ptr, byval window as SDL_Window ptr) as SDL_Renderer ptr
+declare function SDL_GetGPURendererDevice(byval renderer as SDL_Renderer ptr) as SDL_GPUDevice ptr
 declare function SDL_CreateSoftwareRenderer(byval surface as SDL_Surface ptr) as SDL_Renderer ptr
 declare function SDL_GetRenderer(byval window as SDL_Window ptr) as SDL_Renderer ptr
 declare function SDL_GetRenderWindow(byval renderer as SDL_Renderer ptr) as SDL_Window ptr
@@ -69,6 +86,7 @@ declare function SDL_GetRendererProperties(byval renderer as SDL_Renderer ptr) a
 #define SDL_PROP_RENDERER_VSYNC_NUMBER "SDL.renderer.vsync"
 #define SDL_PROP_RENDERER_MAX_TEXTURE_SIZE_NUMBER "SDL.renderer.max_texture_size"
 #define SDL_PROP_RENDERER_TEXTURE_FORMATS_POINTER "SDL.renderer.texture_formats"
+#define SDL_PROP_RENDERER_TEXTURE_WRAPPING_BOOLEAN "SDL.renderer.texture_wrapping"
 #define SDL_PROP_RENDERER_OUTPUT_COLORSPACE_NUMBER "SDL.renderer.output_colorspace"
 #define SDL_PROP_RENDERER_HDR_ENABLED_BOOLEAN "SDL.renderer.HDR_enabled"
 #define SDL_PROP_RENDERER_SDR_WHITE_POINT_FLOAT "SDL.renderer.SDR_white_point"
@@ -99,6 +117,7 @@ declare function SDL_CreateTextureWithProperties(byval renderer as SDL_Renderer 
 #define SDL_PROP_TEXTURE_CREATE_ACCESS_NUMBER "SDL.texture.create.access"
 #define SDL_PROP_TEXTURE_CREATE_WIDTH_NUMBER "SDL.texture.create.width"
 #define SDL_PROP_TEXTURE_CREATE_HEIGHT_NUMBER "SDL.texture.create.height"
+#define SDL_PROP_TEXTURE_CREATE_PALETTE_POINTER "SDL.texture.create.palette"
 #define SDL_PROP_TEXTURE_CREATE_SDR_WHITE_POINT_FLOAT "SDL.texture.create.SDR_white_point"
 #define SDL_PROP_TEXTURE_CREATE_HDR_HEADROOM_FLOAT "SDL.texture.create.HDR_headroom"
 #define SDL_PROP_TEXTURE_CREATE_D3D11_TEXTURE_POINTER "SDL.texture.create.d3d11.texture"
@@ -117,6 +136,11 @@ declare function SDL_CreateTextureWithProperties(byval renderer as SDL_Renderer 
 #define SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_U_NUMBER "SDL.texture.create.opengles2.texture_u"
 #define SDL_PROP_TEXTURE_CREATE_OPENGLES2_TEXTURE_V_NUMBER "SDL.texture.create.opengles2.texture_v"
 #define SDL_PROP_TEXTURE_CREATE_VULKAN_TEXTURE_NUMBER "SDL.texture.create.vulkan.texture"
+#define SDL_PROP_TEXTURE_CREATE_VULKAN_LAYOUT_NUMBER "SDL.texture.create.vulkan.layout"
+#define SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_POINTER "SDL.texture.create.gpu.texture"
+#define SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_UV_POINTER "SDL.texture.create.gpu.texture_uv"
+#define SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_U_POINTER "SDL.texture.create.gpu.texture_u"
+#define SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_V_POINTER "SDL.texture.create.gpu.texture_v"
 
 declare function SDL_GetTextureProperties(byval texture as SDL_Texture ptr) as SDL_PropertiesID
 
@@ -146,9 +170,15 @@ declare function SDL_GetTextureProperties(byval texture as SDL_Texture ptr) as S
 #define SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_V_NUMBER "SDL.texture.opengles2.texture_v"
 #define SDL_PROP_TEXTURE_OPENGLES2_TEXTURE_TARGET_NUMBER "SDL.texture.opengles2.target"
 #define SDL_PROP_TEXTURE_VULKAN_TEXTURE_NUMBER "SDL.texture.vulkan.texture"
+#define SDL_PROP_TEXTURE_GPU_TEXTURE_POINTER "SDL.texture.gpu.texture"
+#define SDL_PROP_TEXTURE_GPU_TEXTURE_UV_POINTER "SDL.texture.gpu.texture_uv"
+#define SDL_PROP_TEXTURE_GPU_TEXTURE_U_POINTER "SDL.texture.gpu.texture_u"
+#define SDL_PROP_TEXTURE_GPU_TEXTURE_V_POINTER "SDL.texture.gpu.texture_v"
 
 declare function SDL_GetRendererFromTexture(byval texture as SDL_Texture ptr) as SDL_Renderer ptr
 declare function SDL_GetTextureSize(byval texture as SDL_Texture ptr, byval w as single ptr, byval h as single ptr) as boolean
+declare function SDL_SetTexturePalette(byval texture as SDL_Texture ptr, byval palette as SDL_Palette ptr) as boolean
+declare function SDL_GetTexturePalette(byval texture as SDL_Texture ptr) as SDL_Palette ptr
 declare function SDL_SetTextureColorMod(byval texture as SDL_Texture ptr, byval r as Uint8, byval g as Uint8, byval b as Uint8) as boolean
 declare function SDL_SetTextureColorModFloat(byval texture as SDL_Texture ptr, byval r as single, byval g as single, byval b as single) as boolean
 declare function SDL_GetTextureColorMod(byval texture as SDL_Texture ptr, byval r as Uint8 ptr, byval g as Uint8 ptr, byval b as Uint8 ptr) as boolean
@@ -206,8 +236,11 @@ declare function SDL_RenderTextureRotated(byval renderer as SDL_Renderer ptr, by
 declare function SDL_RenderTextureAffine(byval renderer as SDL_Renderer ptr, byval texture as SDL_Texture ptr, byval srcrect as const SDL_FRect ptr, byval origin as const SDL_FPoint ptr, byval right as const SDL_FPoint ptr, byval down as const SDL_FPoint ptr) as boolean
 declare function SDL_RenderTextureTiled(byval renderer as SDL_Renderer ptr, byval texture as SDL_Texture ptr, byval srcrect as const SDL_FRect ptr, byval scale as single, byval dstrect as const SDL_FRect ptr) as boolean
 declare function SDL_RenderTexture9Grid(byval renderer as SDL_Renderer ptr, byval texture as SDL_Texture ptr, byval srcrect as const SDL_FRect ptr, byval left_width as single, byval right_width as single, byval top_height as single, byval bottom_height as single, byval scale as single, byval dstrect as const SDL_FRect ptr) as boolean
+declare function SDL_RenderTexture9GridTiled(byval renderer as SDL_Renderer ptr, byval texture as SDL_Texture ptr, byval srcrect as const SDL_FRect ptr, byval left_width as single, byval right_width as single, byval top_height as single, byval bottom_height as single, byval scale as single, byval dstrect as const SDL_FRect ptr, byval tileScale as single) as boolean
 declare function SDL_RenderGeometry(byval renderer as SDL_Renderer ptr, byval texture as SDL_Texture ptr, byval vertices as const SDL_Vertex ptr, byval num_vertices as long, byval indices as const long ptr, byval num_indices as long) as boolean
 declare function SDL_RenderGeometryRaw(byval renderer as SDL_Renderer ptr, byval texture as SDL_Texture ptr, byval xy as const single ptr, byval xy_stride as long, byval color as const SDL_FColor ptr, byval color_stride as long, byval uv as const single ptr, byval uv_stride as long, byval num_vertices as long, byval indices as const any ptr, byval num_indices as long, byval size_indices as long) as boolean
+declare function SDL_SetRenderTextureAddressMode(byval renderer as SDL_Renderer ptr, byval u_mode as SDL_TextureAddressMode, byval v_mode as SDL_TextureAddressMode) as boolean
+declare function SDL_GetRenderTextureAddressMode(byval renderer as SDL_Renderer ptr, byval u_mode as SDL_TextureAddressMode ptr, byval v_mode as SDL_TextureAddressMode ptr) as boolean
 declare function SDL_RenderReadPixels(byval renderer as SDL_Renderer ptr, byval rect as const SDL_Rect ptr) as SDL_Surface ptr
 declare function SDL_RenderPresent(byval renderer as SDL_Renderer ptr) as boolean
 declare sub SDL_DestroyTexture(byval texture as SDL_Texture ptr)
@@ -227,5 +260,26 @@ const SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE = 8
 
 declare function SDL_RenderDebugText(byval renderer as SDL_Renderer ptr, byval x as single, byval y as single, byval str as const zstring ptr) as boolean
 declare function SDL_RenderDebugTextFormat(byval renderer as SDL_Renderer ptr, byval x as single, byval y as single, byval fmt as const zstring ptr, ...) as boolean
+
+declare function SDL_SetDefaultTextureScaleMode(byval renderer as SDL_Renderer ptr, byval scale_mode as SDL_ScaleMode) as boolean
+declare function SDL_GetDefaultTextureScaleMode(byval renderer as SDL_Renderer ptr, byval scale_mode as SDL_ScaleMode ptr) as boolean
+
+type SDL_GPURenderStateCreateInfo
+    fragment_shader as SDL_GPUShader ptr
+    num_sampler_bindings as Sint32
+    sampler_bindings as const SDL_GPUTextureSamplerBinding ptr
+    num_storage_textures as Sint32
+    storage_textures as const SDL_GPUTexture ptr ptr
+    num_storage_buffers as Sint32
+    storage_buffers as const SDL_GPUBuffer ptr ptr
+    props as SDL_PropertiesID
+end type
+
+type SDL_GPURenderState as SDL_GPURenderState_
+
+declare function SDL_CreateGPURenderState(byval renderer as SDL_Renderer ptr, byval createinfo as const SDL_GPURenderStateCreateInfo ptr) as SDL_GPURenderState ptr
+declare function SDL_SetGPURenderStateFragmentUniforms(byval state as SDL_GPURenderState ptr, byval slot_index as Uint32, byval data as const any ptr, byval length as Uint32) as boolean
+declare function SDL_SetGPURenderState(byval renderer as SDL_Renderer ptr, byval state as SDL_GPURenderState ptr) as boolean
+declare sub SDL_DestroyGPURenderState(byval state as SDL_GPURenderState ptr)
 
 end extern
