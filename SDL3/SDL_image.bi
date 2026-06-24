@@ -29,7 +29,7 @@ extern "C"
 
 const SDL_IMAGE_MAJOR_VERSION = 3
 const SDL_IMAGE_MINOR_VERSION = 4
-const SDL_IMAGE_MICRO_VERSION = 2
+const SDL_IMAGE_MICRO_VERSION = 4
 
 #define SDL_IMAGE_VERSION SDL_VERSIONNUM(SDL_IMAGE_MAJOR_VERSION, SDL_IMAGE_MINOR_VERSION, SDL_IMAGE_MICRO_VERSION)
 #define SDL_IMAGE_VERSION_ATLEAST(X, Y, Z) (((SDL_IMAGE_MAJOR_VERSION >= X) andalso ((SDL_IMAGE_MAJOR_VERSION > X) orelse (SDL_IMAGE_MINOR_VERSION >= Y))) andalso (((SDL_IMAGE_MAJOR_VERSION > X) orelse (SDL_IMAGE_MINOR_VERSION > Y)) orelse (SDL_IMAGE_MICRO_VERSION >= Z)))
@@ -90,8 +90,8 @@ declare function IMG_LoadXCF_IO(byval src as SDL_IOStream ptr) as SDL_Surface pt
 declare function IMG_LoadXPM_IO(byval src as SDL_IOStream ptr) as SDL_Surface ptr
 declare function IMG_LoadXV_IO(byval src as SDL_IOStream ptr) as SDL_Surface ptr
 
-declare function IMG_ReadXPMFromArray(byval *xpm as zstring ptr) as SDL_Surface ptr
-declare function IMG_ReadXPMFromArrayToRGB888(byval *xpm as zstring ptr) as SDL_Surface ptr
+declare function IMG_ReadXPMFromArray(byval xpm as zstring ptr ptr) as SDL_Surface ptr
+declare function IMG_ReadXPMFromArrayToRGB888(byval xpm as zstring ptr ptr) as SDL_Surface ptr
 
 declare function IMG_Save(byval surface as SDL_Surface ptr, byval file as const zstring ptr) as boolean
 declare function IMG_SaveTyped_IO(byval surface as SDL_Surface ptr, byval dst as SDL_IOStream ptr, byval closeio as boolean, byval type as const zstring ptr) as boolean
@@ -189,7 +189,7 @@ declare function IMG_CreateAnimationDecoderWithProperties(byval props as SDL_Pro
 #define IMG_PROP_ANIMATION_DECODER_CREATE_GIF_TRANSPARENT_COLOR_INDEX_NUMBER "SDL_image.animation_encoder.create.gif.transparent_color_index"
 #define IMG_PROP_ANIMATION_DECODER_CREATE_GIF_NUM_COLORS_NUMBER          "SDL_image.animation_encoder.create.gif.num_colors"
 
-declare function IMG_GetAnimationDecoderProperties(byval decoder as IMG_AnimationDecoder*) as SDL_PropertiesID
+declare function IMG_GetAnimationDecoderProperties(byval decoder as IMG_AnimationDecoder ptr) as SDL_PropertiesID
 
 #define IMG_PROP_METADATA_IGNORE_PROPS_BOOLEAN                 "SDL_image.metadata.ignore_props"
 #define IMG_PROP_METADATA_DESCRIPTION_STRING                   "SDL_image.metadata.description"
@@ -200,7 +200,7 @@ declare function IMG_GetAnimationDecoderProperties(byval decoder as IMG_Animatio
 #define IMG_PROP_METADATA_FRAME_COUNT_NUMBER                   "SDL_image.metadata.frame_count"
 #define IMG_PROP_METADATA_LOOP_COUNT_NUMBER                    "SDL_image.metadata.loop_count"
 
-declare function IMG_GetAnimationDecoderFrame(byval decoder as IMG_AnimationDecoder ptr, byval *frame as SDL_Surface ptr, byval duration as Uint64 ptr) as boolean
+declare function IMG_GetAnimationDecoderFrame(byval decoder as IMG_AnimationDecoder ptr, byval frame as SDL_Surface ptr ptr, byval duration as Uint64 ptr) as boolean
 declare function IMG_GetAnimationDecoderStatus(byval decoder as IMG_AnimationDecoder ptr) as IMG_AnimationDecoderStatus
 declare function IMG_ResetAnimationDecoder(byval decoder as IMG_AnimationDecoder ptr) as boolean
 declare function IMG_CloseAnimationDecoder(byval decoder as IMG_AnimationDecoder ptr) as boolean
