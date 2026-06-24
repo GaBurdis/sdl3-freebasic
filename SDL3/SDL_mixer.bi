@@ -35,7 +35,7 @@ type MIX_Group as MIX_Group_
 
 const SDL_MIXER_MAJOR_VERSION = 3
 const SDL_MIXER_MINOR_VERSION = 2
-const SDL_MIXER_MICRO_VERSION = 0
+const SDL_MIXER_MICRO_VERSION = 4
 
 #define SDL_MIXER_VERSION SDL_VERSIONNUM(SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_MICRO_VERSION)
 #define SDL_MIXER_VERSION_ATLEAST(X, Y, Z) ((SDL_MIXER_MAJOR_VERSION >= X) andalso (SDL_MIXER_MAJOR_VERSION > X orelse SDL_MIXER_MINOR_VERSION >= Y) andalso (SDL_MIXER_MAJOR_VERSION > X orelse SDL_MIXER_MINOR_VERSION > Y orelse SDL_MIXER_MICRO_VERSION >= Z))
@@ -71,6 +71,7 @@ declare function MIX_LoadAudioWithProperties(byval props as SDL_PropertiesID) as
 #define MIX_PROP_AUDIO_LOAD_PREDECODE_BOOLEAN "SDL_mixer.audio.load.predecode"
 #define MIX_PROP_AUDIO_LOAD_PREFERRED_MIXER_POINTER "SDL_mixer.audio.load.preferred_mixer"
 #define MIX_PROP_AUDIO_LOAD_SKIP_METADATA_TAGS_BOOLEAN "SDL_mixer.audio.load.skip_metadata_tags"
+#define MIX_PROP_AUDIO_LOAD_IGNORE_LOOPS_BOOLEAN "SDL_mixer.audio.load.ignore_loops"
 #define MIX_PROP_AUDIO_DECODER_STRING "SDL_mixer.audio.decoder"
 
 declare function MIX_LoadRawAudio_IO(byval mixer as MIX_Mixer ptr, byval io as SDL_IOStream ptr, byval spec as const SDL_AudioSpec ptr, byval closeio as boolean) as MIX_Audio ptr
@@ -136,6 +137,7 @@ declare function MIX_PlayTrack(byval track as MIX_Track ptr, byval options as SD
 #define MIX_PROP_PLAY_MAX_MILLISECONDS_NUMBER "SDL_mixer.play.max_milliseconds"
 #define MIX_PROP_PLAY_START_FRAME_NUMBER "SDL_mixer.play.start_frame"
 #define MIX_PROP_PLAY_START_MILLISECOND_NUMBER "SDL_mixer.play.start_millisecond"
+#define MIX_PROP_PLAY_START_ORDER_NUMBER "SDL_mixer.play.start_order"
 #define MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER "SDL_mixer.play.loop_start_frame"
 #define MIX_PROP_PLAY_LOOP_START_MILLISECOND_NUMBER "SDL_mixer.play.loop_start_millisecond"
 #define MIX_PROP_PLAY_FADE_IN_FRAMES_NUMBER "SDL_mixer.play.fade_in_frames"
